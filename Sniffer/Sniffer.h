@@ -2,7 +2,8 @@
  * Sniffer.h
  *
  *  Created on: 11-Oct-2010
- *      Author: root
+ *      Author: Kailashnath
+ *      Email : kailashnathreddy@ymail.com or knr413@gmail.com
  */
 
 #ifndef SNIFFER_H_
