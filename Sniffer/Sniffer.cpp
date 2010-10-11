@@ -54,12 +54,16 @@ void sniffCallback(u_char* arg, const struct pcap_pkthdr* pcktHeader, const u_ch
 
 		details = etherHeader->ether_shost;
 
-		printf("Source : %0.2x:%0.2x:%0.2x:%0.2x:%0.2x:%0.2x\n", details[0],details[1],details[2],details[3],
+		printf("Source : %02x:%02x:%02x:%02x:%02x:%02x\n",
+				details[0], details[1],
+				details[2], details[3],
 				details[4], details[5]);
 
 		details = etherHeader->ether_dhost;
-		printf("Destination : %0.2x:%0.2x:%0.2x:%0.2x:%0.2x:%0.2x\n", details[0],details[1],details[2],details[3],
-						details[4], details[5]);
+		printf("Destination : %02x:%02x:%02x:%02x:%02x:%02x\n",
+				details[0], details[1],
+				details[2], details[3],
+				details[4], details[5]);
 }
 
 void Sniffer::startSniffing() {
