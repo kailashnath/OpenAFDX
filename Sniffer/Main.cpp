@@ -28,5 +28,4 @@ int main(void)
 	sf.startSniffing();
 	cout << "Done";
 	return -1;
-
 }

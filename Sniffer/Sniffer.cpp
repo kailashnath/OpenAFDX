@@ -8,11 +8,22 @@
 
 #include "Sniffer.h"
 
+
+
+// initialize the descriptor initially to NULL
+const pcap_t* Sniffer::packetDescr = NULL;
+vector<const u_char*> packetDataVector;
+
 Sniffer::Sniffer(pcap_if_t* interface) {
 
-	this->interface = interface;
+	if(Sniffer::packetDescr != NULL)
+	{
+		printf("Sniffer already running !");
+		return;
+	}
 
-	printf("Initialising sniffer on : %s\n", interface->name);
+	this->interface = interface;
+	printf("Initializing sniffer on : %s\n", interface->name);
 
 	if(pcap_lookupnet(interface->name, &netp, &maskp, errbuf) == -1)
 	{
@@ -37,10 +48,18 @@ void Sniffer::printInterfaceDetails() {
 
 void sniffCallback(u_char* arg, const struct pcap_pkthdr* pcktHeader, const u_char* data) {
 
-		struct ether_header* etherHeader = (struct ether_header*)data;
+		packetDataVector.push_back(data);
 
-		printf("Grabbed packet of length %d \n", pcktHeader->len);
-		printf("Received at %s\n", ctime((const time_t*) &pcktHeader->ts.tv_sec));
+		if(packetDataVector.size() == 1000)
+		{
+			Sniffer snf(NULL);
+			snf.stopSniffing();
+			return;
+		}
+		struct pcap_pkthdr* packetHeader = (struct pcap_pkthdr*) pcktHeader;
+		struct ether_header* etherHeader = (struct ether_header*)data;
+		printf("Grabbed packet of length %d \n", packetHeader->len);
+		printf("Received at %s\n", ctime((const time_t*) &packetHeader->ts.tv_sec));
 
 		if(ntohs(etherHeader->ether_type) != ETHERTYPE_IP)
 		{
@@ -67,15 +86,19 @@ void sniffCallback(u_char* arg, const struct pcap_pkthdr* pcktHeader, const u_ch
 }
 
 void Sniffer::startSniffing() {
-	pcap_t* packDescr;
+
 	u_char error[PCAP_ERRBUF_SIZE];
-	packDescr = pcap_open_live(interface->name, BUFSIZ, 0, -1, errbuf);
-	if(packDescr == NULL) {
+	packetDescr = pcap_open_live(interface->name, BUFSIZ, 0, -1, errbuf);
+	if(packetDescr == NULL) {
 		printf("Error : %s", errbuf);
 		return;
 	}
 
-	pcap_loop(packDescr, -1, sniffCallback, error);
+	pcap_loop((pcap_t*)packetDescr, -1, sniffCallback, error);
+}
+
+void Sniffer::stopSniffing() {
+	pcap_breakloop((pcap_t*)packetDescr);
 }
 
 Sniffer::~Sniffer() {
