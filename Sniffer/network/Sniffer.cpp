@@ -60,7 +60,6 @@ namespace network
 		}
 
 		addr.s_addr = netp;
-
 		net = inet_ntoa(addr);
 		cout << "Network address is " << net << endl;
 
@@ -95,7 +94,8 @@ namespace network
 			details = etherHeader->ether_shost;
 
 			cout << "Source : "
-					<< hex << setfill('0') << setw(2) << (int) details[0] << ":"
+					<< hex << setfill('0')
+					<< setw(2) << (int) details[0] << ":"
 					<< setw(2) << (int) details[1] << ":"
 					<< setw(2) << (int) details[2] << ":"
 					<< setw(2) << (int) details[3] << ":"
@@ -104,7 +104,8 @@ namespace network
 
 			details = etherHeader->ether_dhost;
 			cout << "Destination : "
-					<< hex << setfill('0') << setw(2) << (int) details[0] << ":"
+					<< hex << setfill('0')
+					<< setw(2) << (int) details[0] << ":"
 					<< setw(2) << (int) details[1] << ":"
 					<< setw(2) << (int) details[2] << ":"
 					<< setw(2) << (int) details[3] << ":"

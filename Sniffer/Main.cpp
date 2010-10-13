@@ -22,10 +22,9 @@ int main(void)
 	NetworkConfiguration nc;
 	nc.showUserOptions();
 
-	Sniffer sf(nc.getSelectedInterface());
-
-	if(sf.errorCode > -1)
+	if(nc.isUserOptionValid())
 	{
+		Sniffer sf(nc.getSelectedInterface());
 		boost::thread workerThread(Sniffer::startSniffing);
 		boost::thread monitorSnifferThread(Sniffer::monitorSniffer);
 		monitorSnifferThread.join();

@@ -38,27 +38,34 @@ namespace network
 
 		// convert the user entered input to integer
 		cin >> dec >> choice;
+
 		this->setUserOption(choice);
 	}
 
-	int NetworkConfiguration::setUserOption(int option) {
+	void NetworkConfiguration::setUserOption(int option) {
 
-		if(option > noOfInterfaces)
+		if(0 == option || option > noOfInterfaces)
 		{
 			cout << "Invalid Option" << endl;
-			return -1;
+			return;
 		}
 
 		userOption = option;
-		return 0;
+	}
+
+	bool NetworkConfiguration::isUserOptionValid()
+	{
+		if(userOption == 0 || userOption > noOfInterfaces)
+		{
+			return false;
+		}
+		return true;
 	}
 
 	pcap_if_t* NetworkConfiguration::getSelectedInterface()
 	{
-		if(userOption == 0 || userOption > noOfInterfaces)
-		{
+		if(!this->isUserOptionValid())
 			return NULL;
-		}
 
 		pcap_if_t* currDevice  = NULL;
 		int 	   deviceIndex = 1;
