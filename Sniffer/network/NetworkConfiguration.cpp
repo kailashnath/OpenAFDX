@@ -10,10 +10,8 @@
 
 namespace network
 {
-	int NetworkConfiguration::userOption = 0;
-
-	NetworkConfiguration::NetworkConfiguration() {
-			noOfInterfaces = 0;
+	NetworkConfiguration::NetworkConfiguration()
+	: noOfInterfaces(0), userOption(0) {
 			char errbuf[PCAP_ERRBUF_SIZE];
 
 			if(pcap_findalldevs(&devices, errbuf) == -1)
@@ -29,37 +27,49 @@ namespace network
 		printf("Select one of the below interfaces \n");
 
 
-		for(currDevice = devices; currDevice != NULL; currDevice = currDevice->next, index++)
+		for(currDevice = devices; currDevice != NULL;
+			currDevice = currDevice->next, index++)
 		{
 			cout << index << "." << currDevice->name << endl;
 			noOfInterfaces ++;
 		}
 
 		cout << "Enter your choice : ";
-		cin >> dec >> choice;
 
+		// convert the user entered input to integer
+		cin >> dec >> choice;
 		this->setUserOption(choice);
 	}
 
-	void NetworkConfiguration::setUserOption(int option) {
+	int NetworkConfiguration::setUserOption(int option) {
 
 		if(option > noOfInterfaces)
 		{
 			cout << "Invalid Option" << endl;
-			return;
+			return -1;
 		}
-		NetworkConfiguration::userOption = option;
+
+		userOption = option;
+		return 0;
 	}
 
 	pcap_if_t* NetworkConfiguration::getSelectedInterface()
 	{
-		pcap_if_t* currDevice;
-		int index = 1;
-		for(currDevice = devices; currDevice != NULL; currDevice = currDevice->next, index++)
+		if(userOption == 0 || userOption > noOfInterfaces)
 		{
-			if(index == NetworkConfiguration::userOption)
+			return NULL;
+		}
+
+		pcap_if_t* currDevice  = NULL;
+		int 	   deviceIndex = 1;
+
+		for(currDevice = devices; currDevice != NULL;
+				currDevice = currDevice->next, deviceIndex++)
+		{
+			if(deviceIndex == userOption)
 				break;
 		}
+
 		return currDevice;
 	}
 

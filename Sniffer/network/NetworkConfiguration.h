@@ -19,11 +19,9 @@ namespace network
 	class NetworkConfiguration {
 	private:
 		pcap_if_t* devices;
-		void setUserOption(int);
+		int setUserOption(int);
 		int noOfInterfaces;
-
-	public:
-		static int userOption;
+		int userOption;
 
 	public:
 		NetworkConfiguration();

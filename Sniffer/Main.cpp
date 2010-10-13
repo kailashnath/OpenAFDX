@@ -11,8 +11,8 @@
 #include <iostream>
 #include <boost/thread.hpp>
 
-#include "NetworkConfiguration.h"
-#include "Sniffer.h"
+#include "network/NetworkConfiguration.h"
+#include "network/Sniffer.h"
 
 using namespace std;
 using namespace network;
@@ -24,9 +24,12 @@ int main(void)
 
 	Sniffer sf(nc.getSelectedInterface());
 
-	boost::thread workerThread(Sniffer::startSniffing);
-	boost::thread monitorSnifferThread(Sniffer::monitorSniffer);
-	monitorSnifferThread.join();
+	if(sf.errorCode > -1)
+	{
+		boost::thread workerThread(Sniffer::startSniffing);
+		boost::thread monitorSnifferThread(Sniffer::monitorSniffer);
+		monitorSnifferThread.join();
+	}
 
 	cout << "Completed";
 	return -1;
