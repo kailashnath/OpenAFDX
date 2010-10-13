@@ -100,12 +100,26 @@ namespace network
 
 		static u_char* error;
 		packetDescr = pcap_open_live(interface->name, BUFSIZ, 0, -1, errbuf);
+		struct bpf_program program;
 
 		if(packetDescr == NULL) {
 			cout << "Error : " << errbuf << endl;
 			return;
 		}
 
+		// AFDX specific filter:
+		// filter description : The packet must be of type IP with
+		// udp on top of it whose checksum udp[6:2] is '0x0' (6 = position,
+		// 2 = offset)
+		pcap_compile((pcap_t*)packetDescr, &program,
+				"ip and udp and (udp[6:2] = 0x0)", 1, Sniffer::netp);
+
+		if (pcap_setfilter((pcap_t*) packetDescr, &program) == -1)
+		{
+			cout << "Failed setting the filter" << endl;
+			Sniffer::stopSniffing();
+			return;
+		}
 		pcap_loop((pcap_t*)packetDescr, -1, sniffCallback, error);
 	}
 
@@ -113,7 +127,7 @@ namespace network
 	{
 		while(Sniffer::packetDataVector.size() < 100)
 		{
-			cout << "Size of vector is " << Sniffer::packetDataVector.size() << endl;
+			cout << "Size of vector is " << dec << (int)Sniffer::packetDataVector.size() << endl;
 			sleep(1);
 		}
 		Sniffer::stopSniffing();

@@ -13,6 +13,7 @@ namespace network
 	int NetworkConfiguration::userOption = 0;
 
 	NetworkConfiguration::NetworkConfiguration() {
+			noOfInterfaces = 0;
 			char errbuf[PCAP_ERRBUF_SIZE];
 
 			if(pcap_findalldevs(&devices, errbuf) == -1)
@@ -35,7 +36,7 @@ namespace network
 		}
 
 		cout << "Enter your choice : ";
-		cin >> choice;
+		cin >> dec >> choice;
 
 		this->setUserOption(choice);
 	}
