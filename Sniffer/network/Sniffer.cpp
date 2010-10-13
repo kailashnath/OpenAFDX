@@ -11,20 +11,20 @@
 namespace network
 {
 	// allocate space for static variables
-	const pcap_t* Sniffer::packetDescr = NULL;
-	pcap_if_t* 	  Sniffer::interface   = NULL;
-	bpf_u_int32   Sniffer::netp 	   = NULL;
-	bpf_u_int32   Sniffer::maskp 	   = NULL;
-	int           Sniffer::errorCode   = 0;
+	const pcap_t* Sniffer::_packetDescr = NULL;
+	pcap_if_t* 	  Sniffer::_interface   = NULL;
+	bpf_u_int32   Sniffer::_netp 	   = NULL;
+	bpf_u_int32   Sniffer::_maskp 	   = NULL;
+	int           Sniffer::_errorCode   = 0;
 
-	struct in_addr 		  Sniffer::addr;
-	char 		   		  Sniffer::errbuf[PCAP_ERRBUF_SIZE];
-	vector<const u_char*> Sniffer::packetDataVector;
+	struct in_addr 		  Sniffer::_addr;
+	char 		   		  Sniffer::_errbuf[PCAP_ERRBUF_SIZE];
+	vector<const u_char*> Sniffer::_packetDataVector;
 
 	Sniffer::Sniffer(pcap_if_t* interface)
 	{
 
-		if(packetDescr != NULL)
+		if(_packetDescr != NULL)
 		{
 			cout << "Sniffer already running !" << endl;
 			return;
@@ -32,17 +32,17 @@ namespace network
 		else if (interface == NULL)
 		{
 			cout << "Interface cannot be null" << endl;
-			errorCode = -1;
+			_errorCode = -1;
 			return;
 		}
 
-		Sniffer::interface = interface;
-		cout << "Initializing sniffer on : " << Sniffer::interface->name << endl;
+		Sniffer::_interface = interface;
+		cout << "Initializing sniffer on : " << Sniffer::_interface->name << endl;
 
-		if(pcap_lookupnet(Sniffer::interface->name, &netp, &maskp, errbuf) == -1)
+		if(pcap_lookupnet(Sniffer::_interface->name, &_netp, &_maskp, _errbuf) == -1)
 		{
-			cout << "Error : " << errbuf << endl;
-			errorCode = -1;
+			cout << "Error : " << _errbuf << endl;
+			_errorCode = -1;
 		}
 	}
 
@@ -51,20 +51,20 @@ namespace network
 		char* net;
 		char* mask;
 
-		if(netp == (bpf_u_int32)NULL ||
-           maskp == (bpf_u_int32)NULL)
+		if(_netp == (bpf_u_int32)NULL ||
+           _maskp == (bpf_u_int32)NULL)
 		{
 			cout << "Sniffer was not initialized properly" << endl;
-			errorCode = -1;
+			_errorCode = -1;
 			return -1;
 		}
 
-		addr.s_addr = netp;
-		net = inet_ntoa(addr);
+		_addr.s_addr = _netp;
+		net = inet_ntoa(_addr);
 		cout << "Network address is " << net << endl;
 
-		addr.s_addr = maskp;
-		mask = inet_ntoa(addr);
+		_addr.s_addr = _maskp;
+		mask = inet_ntoa(_addr);
 		cout << "Mask address is " << net << endl;
 
 		return 0;
@@ -73,7 +73,7 @@ namespace network
 	void sniffCallback(u_char* arg, const struct pcap_pkthdr* pcktHeader,
 					  const u_char* data) {
 
-			Sniffer::packetDataVector.push_back(data);
+			Sniffer::_packetDataVector.push_back(data);
 
 			struct pcap_pkthdr* packetHeader = (struct pcap_pkthdr*) pcktHeader;
 			struct ether_header* etherHeader = (struct ether_header*)data;
@@ -118,17 +118,17 @@ namespace network
 		static u_char* error;
 		struct bpf_program program;
 
-		if(interface == NULL)
+		if(_interface == NULL)
 		{
 			cout << "Undefined interface";
-			Sniffer::errorCode = -1;
+			Sniffer::_errorCode = -1;
 			return -1;
 		}
 
-		packetDescr = pcap_open_live(interface->name, BUFSIZ,
-					                 0, -1, errbuf);
-		if(packetDescr == NULL) {
-			cout << "Failed opening on interface. Error : " << errbuf << endl;
+		_packetDescr = pcap_open_live(_interface->name, BUFSIZ,
+					                 0, -1, _errbuf);
+		if(_packetDescr == NULL) {
+			cout << "Failed opening on interface. Error : " << _errbuf << endl;
 			return -1;
 		}
 
@@ -136,28 +136,29 @@ namespace network
 		// filter description : The packet must be of type IP with
 		// udp on top of it whose checksum udp[6:2] is '0x0' (6 = position,
 		// 2 = offset)
-		pcap_compile((pcap_t*)packetDescr, &program,
+		pcap_compile((pcap_t*)_packetDescr, &program,
 					"ip and udp and (udp[6:2] = 0x0)", 1,
-					 Sniffer::netp);
+					 _netp);
 
-		if (pcap_setfilter((pcap_t*) packetDescr, &program) == -1)
+		if (pcap_setfilter((pcap_t*) _packetDescr, &program) == -1)
 		{
 			cout << "Failed setting the AFDX filter" << endl;
-			errorCode = -1;
+			_errorCode = -1;
 			stopSniffing();
 			return -1;
 		}
 
-		pcap_loop((pcap_t*)packetDescr, -1, sniffCallback, error);
+		pcap_loop((pcap_t*)_packetDescr, -1, sniffCallback, error);
 		return 0;
 	}
 
 	// code written temporarily for testing purposes.
 	void Sniffer::monitorSniffer(void)
 	{
-		while(packetDataVector.size() < 100 && errorCode > -1)
+		while(_packetDataVector.size() < 100 && _errorCode > -1)
 		{
-			cout << "Size of vector is " << dec << (int)packetDataVector.size() << endl;
+			cout << "Size of vector is " << dec
+					<< (int)_packetDataVector.size() << endl;
 			sleep(1);
 		}
 
@@ -166,7 +167,7 @@ namespace network
 
 	int Sniffer::stopSniffing() {
 		cout << "Stopping sniffer";
-		pcap_breakloop((pcap_t*)packetDescr);
+		pcap_breakloop((pcap_t*)_packetDescr);
 		return 0;
 	}
 
