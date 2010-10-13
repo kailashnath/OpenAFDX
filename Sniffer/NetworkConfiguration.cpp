@@ -16,7 +16,7 @@ namespace network
 			char errbuf[PCAP_ERRBUF_SIZE];
 
 			if(pcap_findalldevs(&devices, errbuf) == -1)
-				printf("Failed getting all devices");
+				cout << "Failed getting all devices";
 	}
 
 	void NetworkConfiguration::showUserOptions()
@@ -30,15 +30,23 @@ namespace network
 
 		for(currDevice = devices; currDevice != NULL; currDevice = currDevice->next, index++)
 		{
-			printf(" %d. %s\n", index, currDevice->name);
+			cout << index << "." << currDevice->name << endl;
+			noOfInterfaces ++;
 		}
 
-		printf("Enter your choice : ");
-		scanf("%d", &choice);
+		cout << "Enter your choice : ";
+		cin >> choice;
+
 		this->setUserOption(choice);
 	}
 
 	void NetworkConfiguration::setUserOption(int option) {
+
+		if(option > noOfInterfaces)
+		{
+			cout << "Invalid Option" << endl;
+			return;
+		}
 		NetworkConfiguration::userOption = option;
 	}
 

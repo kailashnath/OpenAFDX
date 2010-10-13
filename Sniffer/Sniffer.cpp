@@ -62,7 +62,7 @@ namespace network
 
 			struct pcap_pkthdr* packetHeader = (struct pcap_pkthdr*) pcktHeader;
 			struct ether_header* etherHeader = (struct ether_header*)data;
-			cout << "Grabbed packet of length " << packetHeader->len << endl;
+			cout << "Grabbed packet of length " << dec << (int)packetHeader->len << endl;
 			cout << "Received at " << ctime((const time_t*) &packetHeader->ts.tv_sec) << endl;
 
 			if(ntohs(etherHeader->ether_type) != ETHERTYPE_IP)

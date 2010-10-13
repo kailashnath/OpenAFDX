@@ -9,6 +9,9 @@
 #ifndef NETWORKCONFIGURATION_H_
 #define NETWORKCONFIGURATION_H_
 #include "pcap.h"
+#include <iostream>
+
+using namespace std;
 
 namespace network
 {
@@ -16,6 +19,7 @@ namespace network
 	private:
 		pcap_if_t* devices;
 		void setUserOption(int);
+		int noOfInterfaces;
 
 	public:
 		static int userOption;
