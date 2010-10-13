@@ -6,26 +6,28 @@
  *      Email : kailashnathreddy@ymail.com or knr413@gmail.com
  */
 
-#include <pcap.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
-#include <errno.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
+#include <boost/thread.hpp>
+
 #include "NetworkConfiguration.h"
 #include "Sniffer.h"
 
 using namespace std;
+using namespace network;
 
 int main(void)
 {
 	NetworkConfiguration nc;
 	nc.showUserOptions();
+
 	Sniffer sf(nc.getSelectedInterface());
-	sf.printInterfaceDetails();
-	sf.startSniffing();
-	cout << "Done";
+
+	boost::thread workerThread(Sniffer::startSniffing);
+	boost::thread monitorSnifferThread(Sniffer::monitorSniffer);
+	monitorSnifferThread.join();
+
+	cout << "Completed";
 	return -1;
 }

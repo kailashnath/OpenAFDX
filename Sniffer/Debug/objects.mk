@@ -4,4 +4,4 @@
 
 USER_OBJS :=
 
-LIBS := -lpcap
+LIBS := -lpcap -lboost_thread

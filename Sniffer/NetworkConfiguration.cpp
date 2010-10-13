@@ -8,50 +8,53 @@
 
 #include "NetworkConfiguration.h"
 
-int NetworkConfiguration::userOption = 0;
-
-NetworkConfiguration::NetworkConfiguration() {
-		char errbuf[PCAP_ERRBUF_SIZE];
-
-		if(pcap_findalldevs(&devices, errbuf) == -1)
-			printf("Failed getting all devices");
-}
-
-void NetworkConfiguration::showUserOptions()
+namespace network
 {
-	int choice;
-	int index = 1;
-	pcap_if_t* currDevice;
+	int NetworkConfiguration::userOption = 0;
 
-	printf("Select one of the below interfaces \n");
+	NetworkConfiguration::NetworkConfiguration() {
+			char errbuf[PCAP_ERRBUF_SIZE];
 
-
-	for(currDevice = devices; currDevice != NULL; currDevice = currDevice->next, index++)
-	{
-		printf(" %d. %s\n", index, currDevice->name);
+			if(pcap_findalldevs(&devices, errbuf) == -1)
+				printf("Failed getting all devices");
 	}
 
-	printf("Enter your choice : ");
-	scanf("%d", &choice);
-	this->setUserOption(choice);
-}
-
-void NetworkConfiguration::setUserOption(int option) {
-	NetworkConfiguration::userOption = option;
-}
-
-pcap_if_t* NetworkConfiguration::getSelectedInterface()
-{
-	pcap_if_t* currDevice;
-	int index = 1;
-	for(currDevice = devices; currDevice != NULL; currDevice = currDevice->next, index++)
+	void NetworkConfiguration::showUserOptions()
 	{
-		if(index == NetworkConfiguration::userOption)
-			break;
-	}
-	return currDevice;
-}
+		int choice;
+		int index = 1;
+		pcap_if_t* currDevice;
 
-NetworkConfiguration::~NetworkConfiguration() {
-	pcap_freealldevs(devices);
+		printf("Select one of the below interfaces \n");
+
+
+		for(currDevice = devices; currDevice != NULL; currDevice = currDevice->next, index++)
+		{
+			printf(" %d. %s\n", index, currDevice->name);
+		}
+
+		printf("Enter your choice : ");
+		scanf("%d", &choice);
+		this->setUserOption(choice);
+	}
+
+	void NetworkConfiguration::setUserOption(int option) {
+		NetworkConfiguration::userOption = option;
+	}
+
+	pcap_if_t* NetworkConfiguration::getSelectedInterface()
+	{
+		pcap_if_t* currDevice;
+		int index = 1;
+		for(currDevice = devices; currDevice != NULL; currDevice = currDevice->next, index++)
+		{
+			if(index == NetworkConfiguration::userOption)
+				break;
+		}
+		return currDevice;
+	}
+
+	NetworkConfiguration::~NetworkConfiguration() {
+		pcap_freealldevs(devices);
+	}
 }

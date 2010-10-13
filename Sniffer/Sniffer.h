@@ -16,28 +16,34 @@
 #include <arpa/inet.h>
 #include <netinet/ether.h>
 #include <time.h>
+#include <iostream>
+#include <iomanip>
 
 using namespace std;
+using std::hex;
 
-class Sniffer {
-private:
-	char errbuf[PCAP_ERRBUF_SIZE];
-	pcap_if_t* interface;
-	struct in_addr addr;
-	bpf_u_int32 netp;
-	bpf_u_int32 maskp;
-	void test();
+namespace network
+{
+	class Sniffer
+	{
+	private:
+		static char errbuf[PCAP_ERRBUF_SIZE];
+		static pcap_if_t* interface;
+		static struct in_addr addr;
+		static bpf_u_int32 netp;
+		static bpf_u_int32 maskp;
 
-public:
-	// this variable holds the pcap
-	// packet descriptor
-	static const pcap_t* packetDescr;
-	static vector<const u_char*> packetDataVector;
-	Sniffer(pcap_if_t*);
-	void printInterfaceDetails(void);
-	void startSniffing(void);
-	void stopSniffing(void);
-	virtual ~Sniffer(void);
-};
-
+	public:
+		// this variable holds the pcap
+		// packet descriptor
+		static const pcap_t* packetDescr;
+		static vector<const u_char*> packetDataVector;
+		Sniffer(pcap_if_t*);
+		static void printInterfaceDetails(void);
+		static void startSniffing(void);
+		static void stopSniffing(void);
+		static void monitorSniffer(void);
+		virtual ~Sniffer(void);
+	};
+}
 #endif /* SNIFFER_H_ */
