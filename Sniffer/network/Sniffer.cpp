@@ -76,8 +76,10 @@ namespace network
 
 			Sniffer::packetDataVector.push_back(data);
 
-			struct pcap_pkthdr* packetHeader = (struct pcap_pkthdr*) pcktHeader;
-			struct ether_header* etherHeader = (struct ether_header*)data;
+			struct pcap_pkthdr* packetHeader =
+					dynamic_cast<struct pcap_pkthdr*>(pcktHeader);
+			struct ether_header* etherHeader =
+					dynamic_cast<struct ether_header*>(data);
 			cout << "Grabbed packet of length " << dec << (int)packetHeader->len << endl;
 			cout << "Received at " << ctime((const time_t*) &packetHeader->ts.tv_sec) << endl;
 
