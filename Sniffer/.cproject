@@ -29,6 +29,7 @@
 <listOptionValue builtIn="false" value="/usr/local/lib"/>
 </option>
 <option id="gnu.cpp.compiler.option.other.verbose.1124961940" name="Verbose (-v)" superClass="gnu.cpp.compiler.option.other.verbose" value="false" valueType="boolean"/>
+<option id="gnu.cpp.compiler.option.warnings.toerrors.1185831270" superClass="gnu.cpp.compiler.option.warnings.toerrors" value="true" valueType="boolean"/>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.487676618" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.debug.1024806889" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.debug">

@@ -11,11 +11,13 @@
 #include <vector>
 #include <pcap.h>
 #include <netinet/in.h>
+#include <netinet/ip.h>
 #include <arpa/inet.h>
 #include <netinet/ether.h>
 #include <time.h>
 #include <iostream>
 #include <iomanip>
+#include "common.h"
 
 using namespace std;
 

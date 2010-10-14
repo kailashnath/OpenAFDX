@@ -13,13 +13,12 @@ namespace network
 	// allocate space for static variables
 	const pcap_t* Sniffer::_packetDescr = NULL;
 	pcap_if_t* 	  Sniffer::_interface   = NULL;
-	bpf_u_int32   Sniffer::_netp 	   = NULL;
-	bpf_u_int32   Sniffer::_maskp 	   = NULL;
+	bpf_u_int32   Sniffer::_netp 	    = NULL;
+	bpf_u_int32   Sniffer::_maskp 	    = NULL;
 	int           Sniffer::_errorCode   = 0;
 
 	struct in_addr 		  Sniffer::_addr;
 	char 		   		  Sniffer::_errbuf[PCAP_ERRBUF_SIZE];
-	vector<const u_char*> Sniffer::_packetDataVector;
 
 	Sniffer::Sniffer(pcap_if_t* interface)
 	{
@@ -70,50 +69,7 @@ namespace network
 		return 0;
 	}
 
-	void sniffCallback(u_char* arg, const struct pcap_pkthdr* pcktHeader,
-					  const u_char* data) {
 
-			Sniffer::_packetDataVector.push_back(data);
-
-			struct ether_header* etherHeader =
-					reinterpret_cast<struct ether_header*>(
-							const_cast<u_char*>(data));
-			cout << "Grabbed packet of length " << dec << static_cast<int>(pcktHeader->len) << endl;
-
-			cout << "Received at " << ctime(const_cast<const time_t*>(&(pcktHeader->ts.tv_sec))) << endl;
-
-			if(ntohs(etherHeader->ether_type) != ETHERTYPE_IP)
-			{
-				cout << "Packet is not of type IP. Discarding packet" << endl;
-				return;
-			}
-			uint16_t ethtype = ntohs(etherHeader->ether_type);
-			cout << "Ethernet type is hex : " << hex << ethtype << ", dec : "
-					<< dec << static_cast<int>(ethtype) << endl;
-
-			u_char* details;
-
-			details = etherHeader->ether_shost;
-
-			cout << "Source : "
-					<< hex << setfill('0')
-					<< setw(2) << static_cast<int>(details[0]) << ":"
-					<< setw(2) << static_cast<int>(details[1]) << ":"
-					<< setw(2) << static_cast<int>(details[2]) << ":"
-					<< setw(2) << static_cast<int>(details[3]) << ":"
-					<< setw(2) << static_cast<int>(details[4]) << ":"
-					<< setw(2) << static_cast<int>(details[5]) << endl;
-
-			details = etherHeader->ether_dhost;
-			cout << "Destination : "
-					<< hex << setfill('0')
-					<< setw(2) << static_cast<int>(details[0]) << ":"
-					<< setw(2) << static_cast<int>(details[1]) << ":"
-					<< setw(2) << static_cast<int>(details[2]) << ":"
-					<< setw(2) << static_cast<int>(details[3]) << ":"
-					<< setw(2) << static_cast<int>(details[4]) << ":"
-					<< setw(2) << static_cast<int>(details[5]) << endl;
-	}
 
 	int Sniffer::startSniffing() {
 
@@ -138,9 +94,10 @@ namespace network
 		// filter description : The packet must be of type IP with
 		// udp on top of it whose checksum udp[6:2] is '0x0' (6 = position,
 		// 2 = offset)
+		// udp checksum filter : and udp[6:2] = 0x0
+		// omitter temporarily for testing purposes
 		pcap_compile(const_cast<pcap_t*>(_packetDescr), &program,
-					"ip and udp", 1,
-					 _netp);
+					"ip and tcp", 1, _netp);
 
 		if (pcap_setfilter(const_cast<pcap_t*>(_packetDescr)
 				, &program) == -1)
@@ -152,17 +109,17 @@ namespace network
 		}
 
 		pcap_loop(const_cast<pcap_t*>(_packetDescr), -1,
-				sniffCallback, error);
+				pcapCallback, error);
 		return 0;
 	}
 
 	// code written temporarily for testing purposes.
 	void Sniffer::monitorSniffer(void)
 	{
-		while(_packetDataVector.size() < 100 && _errorCode > -1)
+		while(packetDataVector.size() < 100 && _errorCode > -1)
 		{
 			cout << "Size of vector is " << dec
-					<< static_cast<int>(_packetDataVector.size()) << endl;
+					<< static_cast<int>(packetDataVector.size()) << endl;
 			sleep(1);
 		}
 
