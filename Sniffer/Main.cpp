@@ -26,6 +26,7 @@ int main(void)
 	nc.showUserOptions();
 	Reader r(filename);
 	r.printDetails();
+
 	/*
 	if(nc.isUserOptionValid())
 	{

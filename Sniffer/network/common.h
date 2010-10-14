@@ -2,7 +2,8 @@
  * common.h
  *
  *  Created on: 14-Oct-2010
- *      Author: root
+ *      Author: Kailashnath
+ *      Email : kailashnathreddy@ymail.com or knr413@gmail.com
  */
 
 #ifndef COMMON_H_
@@ -17,13 +18,18 @@
 #include <netinet/in.h>
 #include <netinet/ip.h>
 #include <netinet/udp.h>
+#include "Sniffer.h"
 
 using namespace std;
-static vector<const u_char*> packetDataVector;
-void pcapCallback(u_char*, const struct pcap_pkthdr*, const u_char*);
-void showPacketDetails(const struct pcap_pkthdr*);
-void showEthernetDetails(const struct ether_header*);
-void showIPDetails(const struct iphdr*);
-void showUDPDetails(const struct udphdr*);
-void showPayload(const u_char*);
+
+namespace network
+{
+	static vector<const u_char*> packetDataVector;
+	void pcapCallback(u_char*, const struct pcap_pkthdr*, const u_char*);
+	void showPacketDetails(const struct pcap_pkthdr*);
+	void showEthernetDetails(const struct ether_header*);
+	void showIPDetails(const struct iphdr*);
+	void showUDPDetails(const struct udphdr*);
+	void showPayload(const u_char*);
+}
 #endif /* COMMON_H_ */

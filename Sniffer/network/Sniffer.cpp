@@ -23,12 +23,12 @@ namespace network
 	Sniffer::Sniffer(pcap_if_t* interface)
 	{
 
-		if(_packetDescr != NULL)
+		if(NULL != _packetDescr)
 		{
 			cout << "Sniffer already running !" << endl;
 			return;
 		}
-		else if (interface == NULL)
+		else if (NULL == interface)
 		{
 			cout << "Interface cannot be null" << endl;
 			_errorCode = -1;
@@ -36,9 +36,11 @@ namespace network
 		}
 
 		Sniffer::_interface = interface;
-		cout << "Initializing sniffer on : " << Sniffer::_interface->name << endl;
+		cout << "Initializing sniffer on : " << Sniffer::_interface->name
+				<< endl;
 
-		if(pcap_lookupnet(Sniffer::_interface->name, &_netp, &_maskp, _errbuf) == -1)
+		if(-1 == pcap_lookupnet(Sniffer::_interface->name,
+				&_netp, &_maskp, _errbuf))
 		{
 			cout << "Error : " << _errbuf << endl;
 			_errorCode = -1;
@@ -50,8 +52,7 @@ namespace network
 		char* net;
 		char* mask;
 
-		if(_netp == (bpf_u_int32)NULL ||
-           _maskp == (bpf_u_int32)NULL)
+		if(NULL == _netp || NULL == _maskp)
 		{
 			cout << "Sniffer was not initialized properly" << endl;
 			_errorCode = -1;
@@ -76,7 +77,7 @@ namespace network
 		static u_char* error;
 		struct bpf_program program;
 
-		if(_interface == NULL)
+		if(NULL == _interface)
 		{
 			cout << "Undefined interface";
 			Sniffer::_errorCode = -1;
@@ -95,12 +96,11 @@ namespace network
 		// udp on top of it whose checksum udp[6:2] is '0x0' (6 = position,
 		// 2 = offset)
 		// udp checksum filter : and udp[6:2] = 0x0
-		// omitter temporarily for testing purposes
+		// omitted temporarily for testing purposes
 		pcap_compile(const_cast<pcap_t*>(_packetDescr), &program,
 					"ip and tcp", 1, _netp);
 
-		if (pcap_setfilter(const_cast<pcap_t*>(_packetDescr)
-				, &program) == -1)
+		if (-1 == pcap_setfilter(const_cast<pcap_t*>(_packetDescr), &program))
 		{
 			cout << "Failed setting the AFDX filter" << endl;
 			_errorCode = -1;
@@ -124,6 +124,11 @@ namespace network
 		}
 
 		Sniffer::stopSniffing();
+	}
+
+	const pcap_t* Sniffer::getPcapHandler(void)
+	{
+		return _packetDescr;
 	}
 
 	int Sniffer::stopSniffing() {

@@ -14,7 +14,7 @@ namespace network
 	: _noOfInterfaces(0), _userOption(0) {
 			char errbuf[PCAP_ERRBUF_SIZE];
 
-			if(pcap_findalldevs(&_devices, errbuf) == -1)
+			if(-1 == pcap_findalldevs(&_devices, errbuf))
 				cout << "Failed getting all devices";
 	}
 
@@ -26,7 +26,7 @@ namespace network
 
 		cout << "Select one of the below interfaces" << endl;
 
-		for(currDevice = _devices; currDevice != NULL;
+		for(currDevice = _devices; NULL != currDevice;
 			currDevice = currDevice->next, index++)
 		{
 			cout << index << "." << currDevice->name << endl;
@@ -54,7 +54,7 @@ namespace network
 
 	bool NetworkConfiguration::isUserOptionValid()
 	{
-		if(_userOption == 0 || _userOption > _noOfInterfaces)
+		if(0 == _userOption|| _userOption > _noOfInterfaces)
 		{
 			return false;
 		}
@@ -70,7 +70,7 @@ namespace network
 		pcap_if_t* currDevice  = NULL;
 		int 	   deviceIndex = 1;
 
-		for(currDevice = _devices; currDevice != NULL;
+		for(currDevice = _devices; NULL != currDevice;
 				currDevice = currDevice->next, deviceIndex++)
 		{
 			if(deviceIndex == _userOption)

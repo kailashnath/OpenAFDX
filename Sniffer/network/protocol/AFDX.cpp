@@ -1,9 +1,11 @@
 /*
  * AFDX.cpp
  *
- *  Created on: 14-Oct-2010
- *      Author: root
+ *  Created on: 11-Oct-2010
+ *      Author: Kailashnath
+ *      Email : kailashnathreddy@ymail.com or knr413@gmail.com
  */
+
 
 #include "AFDX.h"
 
