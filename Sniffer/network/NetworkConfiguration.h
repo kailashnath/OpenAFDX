@@ -18,16 +18,18 @@ namespace network
 {
 	class NetworkConfiguration {
 	private:
-		pcap_if_t* devices;
-		int setUserOption(int);
-		int noOfInterfaces;
-		int userOption;
+		pcap_if_t* _devices;
+		int _noOfInterfaces;
+		int _userOption;
+		void setUserOption(int);
 
 	public:
 		NetworkConfiguration();
 		void showUserOptions();
+		bool isUserOptionValid();
 		pcap_if_t* getSelectedInterface();
 		virtual ~NetworkConfiguration();
+
 	};
 }
 #endif /* NETWORKCONFIGURATION_H_ */

@@ -11,10 +11,10 @@
 namespace network
 {
 	NetworkConfiguration::NetworkConfiguration()
-	: noOfInterfaces(0), userOption(0) {
+	: _noOfInterfaces(0), _userOption(0) {
 			char errbuf[PCAP_ERRBUF_SIZE];
 
-			if(pcap_findalldevs(&devices, errbuf) == -1)
+			if(pcap_findalldevs(&_devices, errbuf) == -1)
 				cout << "Failed getting all devices";
 	}
 
@@ -24,49 +24,56 @@ namespace network
 		int index = 1;
 		pcap_if_t* currDevice;
 
-		printf("Select one of the below interfaces \n");
+		cout << "Select one of the below interfaces" << endl;
 
-
-		for(currDevice = devices; currDevice != NULL;
+		for(currDevice = _devices; currDevice != NULL;
 			currDevice = currDevice->next, index++)
 		{
 			cout << index << "." << currDevice->name << endl;
-			noOfInterfaces ++;
+			_noOfInterfaces ++;
 		}
 
 		cout << "Enter your choice : ";
 
 		// convert the user entered input to integer
 		cin >> dec >> choice;
+
 		this->setUserOption(choice);
 	}
 
-	int NetworkConfiguration::setUserOption(int option) {
+	void NetworkConfiguration::setUserOption(int option) {
 
-		if(option > noOfInterfaces)
+		if(0 == option || option > _noOfInterfaces)
 		{
 			cout << "Invalid Option" << endl;
-			return -1;
+			return;
 		}
 
-		userOption = option;
-		return 0;
+		_userOption = option;
+	}
+
+	bool NetworkConfiguration::isUserOptionValid()
+	{
+		if(_userOption == 0 || _userOption > _noOfInterfaces)
+		{
+			return false;
+		}
+
+		return true;
 	}
 
 	pcap_if_t* NetworkConfiguration::getSelectedInterface()
 	{
-		if(userOption == 0 || userOption > noOfInterfaces)
-		{
+		if(!this->isUserOptionValid())
 			return NULL;
-		}
 
 		pcap_if_t* currDevice  = NULL;
 		int 	   deviceIndex = 1;
 
-		for(currDevice = devices; currDevice != NULL;
+		for(currDevice = _devices; currDevice != NULL;
 				currDevice = currDevice->next, deviceIndex++)
 		{
-			if(deviceIndex == userOption)
+			if(deviceIndex == _userOption)
 				break;
 		}
 
@@ -74,6 +81,6 @@ namespace network
 	}
 
 	NetworkConfiguration::~NetworkConfiguration() {
-		pcap_freealldevs(devices);
+		pcap_freealldevs(_devices);
 	}
 }

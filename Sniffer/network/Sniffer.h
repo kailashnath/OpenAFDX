@@ -24,18 +24,18 @@ namespace network
 	class Sniffer
 	{
 	private:
-		static char errbuf[PCAP_ERRBUF_SIZE];
-		static pcap_if_t* interface;
-		static struct in_addr addr;
-		static bpf_u_int32 netp;
-		static bpf_u_int32 maskp;
+		static char _errbuf[PCAP_ERRBUF_SIZE];
+		static pcap_if_t* _interface;
+		static struct in_addr _addr;
+		static bpf_u_int32 _netp;
+		static bpf_u_int32 _maskp;
 		// this variable holds the pcap
 		// packet descriptor
-		static const pcap_t* packetDescr;
+		static const pcap_t* _packetDescr;
 
 	public:
-		static int errorCode;
-		static vector<const u_char*> packetDataVector;
+		static int _errorCode;
+		static vector<const u_char*> _packetDataVector;
 
 	public:
 		Sniffer(pcap_if_t*);
