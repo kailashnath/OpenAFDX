@@ -91,8 +91,9 @@ namespace network
 
 		_packetDescr = pcap_open_live(_interface->name, BUFSIZ,
 					                 0, -1, _errbuf);
-		if(_packetDescr == NULL) {
-			std::cout << "Failed opening on interface. Error : " << _errbuf << std::endl;
+		if(NULL == _packetDescr) {
+			std::cout << "Failed opening on interface. Error : "
+					<< _errbuf << std::endl;
 			return -1;
 		}
 

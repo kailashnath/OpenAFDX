@@ -43,9 +43,11 @@ namespace network
 	void Reader::print_details(void)
 	{
 		u_char* error = NULL;
-		if(-1 == pcap_loop(const_cast<pcap_t*>(this->_handler), 0, common::pcapCallback, error))
+		if(-1 == pcap_loop(const_cast<pcap_t*>(this->_handler), 0,
+				common::pcapCallback, error))
 		{
-			std::cout << "Error while reading the capture file : " << error << std::endl;
+			std::cout << "Error while reading the capture file : " << error
+					<< std::endl;
 		}
 	}
 

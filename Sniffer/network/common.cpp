@@ -10,7 +10,7 @@
 
 namespace network
 {
-	std::string common::kafdxFilterExperssion = "ip and udp";
+	const std::string common::kafdxFilterExperssion = "ip and udp";
 	void common::pcapCallback(u_char* arg, const struct pcap_pkthdr* pcktHeader,
 					  const u_char* data)
 	{
@@ -34,21 +34,24 @@ namespace network
 
 		detIndex += sizeof(struct udphdr);
 		show_payload(data + detIndex);
-
 	}
 
 	void common::show_packet_details(const struct pcap_pkthdr* packet_header)
 	{
-		std::cout << "Length of the packet is : " << packet_header->len << std::endl;
-		std::cout << "Received at : " << ctime(const_cast<const time_t*>(&packet_header->ts.tv_sec)) << std::endl;
+		std::cout << "Length of the packet is : " << packet_header->len
+				<< std::endl;
+		std::cout << "Received at : "
+				<< ctime(const_cast<const time_t*>(&packet_header->ts.tv_sec))
+				<< std::endl;
 	}
 
 	void common::show_ether_details(const struct ether_header* ether_header)
 	{
 		uint16_t ethtype = ntohs(ether_header->ether_type);
 
-		std::cout << "Ethernet type is hex : " << std::hex << ethtype << ", dec : "
-			      << std::dec << static_cast<int>(ethtype) << std::endl;
+		std::cout << "Ethernet type is hex : " << std::hex << ethtype
+				<< ", dec : "
+				<< std::dec << static_cast<int>(ethtype) << std::endl;
 
 		std::cout << "Source : " <<
 				  ether_ntoa(reinterpret_cast<const struct ether_addr*>(
@@ -71,13 +74,12 @@ namespace network
 				<< htons(udp_header->source) << std::endl;
 		std::cout << "UDP destination port is : " << std::dec
 				<< htons(udp_header->dest) << std::endl;
-		std::cout << "UDP Checksum is : " << std::dec <<
-				htons(udp_header->check) << std::endl;
+		std::cout << "UDP Checksum is : " << std::dec
+				<< htons(udp_header->check) << std::endl;
 	}
 
 	void common::show_payload(const u_char* data)
 	{
-		//char* payload = reinterpret_cast<char*>(const_cast<u_char*>(data));
 		std::cout << data << std::endl;
 	}
 }
