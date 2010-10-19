@@ -23,18 +23,18 @@ const char* filename = "/media/439385db-7b6b-4585-a6ae-bd5553ca10d7/Releases/ITR
 int main(void)
 {
 	NetworkConfiguration nc;
-	nc.showUserOptions();
-	Reader r(filename);
-	r.printDetails();
+	nc.show_user_options();
+	/*Reader r(filename);
+	r.print_details();
+	*/
 
-	/*
-	if(nc.isUserOptionValid())
+	if(nc.is_option_valid())
 	{
-		Sniffer sf(nc.getSelectedInterface());
-		boost::thread workerThread(Sniffer::startSniffing);
-		boost::thread monitorSnifferThread(Sniffer::monitorSniffer);
-		monitorSnifferThread.join();
-	}*/
+		Sniffer sf(nc.get_selected_iface());
+		boost::thread workerThread(Sniffer::start_sniffing);
+		boost::thread monitor_snifferThread(Sniffer::monitor_sniffer);
+		monitor_snifferThread.join();
+	}
 
 	cout << "Completed";
 	return -1;

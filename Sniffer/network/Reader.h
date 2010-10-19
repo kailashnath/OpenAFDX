@@ -9,12 +9,7 @@
 #ifndef READER_H_
 #define READER_H_
 
-#include <iostream>
-#include <string.h>
-#include <pcap.h>
 #include "common.h"
-
-using namespace std;
 
 namespace network
 {
@@ -25,11 +20,11 @@ namespace network
 		const pcap_t* _handler;
 		char _errBuf[PCAP_ERRBUF_SIZE];
 		int _errCode;
-		int openCaptureFile();
+		int open_capture_file();
 
 	public:
 		Reader(const char*);
-		void printDetails();
+		void print_details();
 		virtual ~Reader();
 	};
 }

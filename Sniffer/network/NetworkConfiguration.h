@@ -12,8 +12,6 @@
 #include <iostream>
 #include <iomanip>
 
-using namespace std;
-
 namespace network
 {
 	class NetworkConfiguration {
@@ -21,13 +19,13 @@ namespace network
 		pcap_if_t* _devices;
 		int _noOfInterfaces;
 		int _userOption;
-		void setUserOption(int);
+		void set_user_option(int);
 
 	public:
 		NetworkConfiguration();
-		void showUserOptions();
-		bool isUserOptionValid();
-		pcap_if_t* getSelectedInterface();
+		void show_user_options();
+		bool is_option_valid();
+		pcap_if_t* get_selected_iface();
 		virtual ~NetworkConfiguration();
 
 	};

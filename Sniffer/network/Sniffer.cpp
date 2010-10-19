@@ -20,66 +20,71 @@ namespace network
 	struct in_addr 		  Sniffer::_addr;
 	char 		   		  Sniffer::_errbuf[PCAP_ERRBUF_SIZE];
 
+	// global static variable which holds the list of all
+	// packets being captured.
+	std::vector<const u_char*> common::packetDataVector;
+
 	Sniffer::Sniffer(pcap_if_t* interface)
 	{
 
 		if(NULL != _packetDescr)
 		{
-			cout << "Sniffer already running !" << endl;
+			std::cout << "Sniffer already running !" << std::endl;
 			return;
 		}
 		else if (NULL == interface)
 		{
-			cout << "Interface cannot be null" << endl;
+			std::cout << "Interface cannot be null" << std::endl;
 			_errorCode = -1;
 			return;
 		}
 
 		Sniffer::_interface = interface;
-		cout << "Initializing sniffer on : " << Sniffer::_interface->name
-				<< endl;
+		std::cout << "Initializing sniffer on : " << Sniffer::_interface->name
+				<< std::endl;
 
 		if(-1 == pcap_lookupnet(Sniffer::_interface->name,
 				&_netp, &_maskp, _errbuf))
 		{
-			cout << "Error : " << _errbuf << endl;
+			std::cout << "Error : " << _errbuf << std::endl;
 			_errorCode = -1;
 		}
 	}
 
-	int Sniffer::printInterfaceDetails()
+	int Sniffer::print_iface_details()
 	{
 		char* net;
 		char* mask;
 
 		if(NULL == _netp || NULL == _maskp)
 		{
-			cout << "Sniffer was not initialized properly" << endl;
+			std::cout << "Sniffer was not initialized properly" << std::endl;
 			_errorCode = -1;
 			return -1;
 		}
 
 		_addr.s_addr = _netp;
 		net = inet_ntoa(_addr);
-		cout << "Network address is " << net << endl;
+		std::cout << "Network address is " << net << std::endl;
 
 		_addr.s_addr = _maskp;
 		mask = inet_ntoa(_addr);
-		cout << "Mask address is " << net << endl;
+		std::cout << "Mask address is " << net << std::endl;
 
 		return 0;
 	}
 
 
 
-	int Sniffer::startSniffing() {
+	int Sniffer::start_sniffing()
+	{
 
 		static u_char* error;
 		struct bpf_program program;
 
 		if(NULL == _interface)
 		{
-			cout << "Undefined interface";
+			std::cout << "Undefined interface";
 			Sniffer::_errorCode = -1;
 			return -1;
 		}
@@ -87,7 +92,7 @@ namespace network
 		_packetDescr = pcap_open_live(_interface->name, BUFSIZ,
 					                 0, -1, _errbuf);
 		if(_packetDescr == NULL) {
-			cout << "Failed opening on interface. Error : " << _errbuf << endl;
+			std::cout << "Failed opening on interface. Error : " << _errbuf << std::endl;
 			return -1;
 		}
 
@@ -98,46 +103,47 @@ namespace network
 		// udp checksum filter : and udp[6:2] = 0x0
 		// omitted temporarily for testing purposes
 		pcap_compile(const_cast<pcap_t*>(_packetDescr), &program,
-					"ip and tcp", 1, _netp);
+				common::kafdxFilterExperssion.c_str(), 1, _netp);
 
 		if (-1 == pcap_setfilter(const_cast<pcap_t*>(_packetDescr), &program))
 		{
-			cout << "Failed setting the AFDX filter" << endl;
+			std::cout << "Failed setting the AFDX filter" << std::endl;
 			_errorCode = -1;
-			stopSniffing();
+			stop_sniffing();
 			return -1;
 		}
 
 		pcap_loop(const_cast<pcap_t*>(_packetDescr), -1,
-				pcapCallback, error);
+				common::pcapCallback, error);
 		return 0;
 	}
 
 	// code written temporarily for testing purposes.
-	void Sniffer::monitorSniffer(void)
+	// TODO Delete this function. :)
+	void Sniffer::monitor_sniffer(void)
 	{
-		while(packetDataVector.size() < 100 && _errorCode > -1)
+		while(true)
 		{
-			cout << "Size of vector is " << dec
-					<< static_cast<int>(packetDataVector.size()) << endl;
+			std::cout << "Vector size is : "
+					<< common::packetDataVector.size() << std::endl;
 			sleep(1);
 		}
 
-		Sniffer::stopSniffing();
+		Sniffer::stop_sniffing();
 	}
 
-	const pcap_t* Sniffer::getPcapHandler(void)
+	int Sniffer::stop_sniffing()
 	{
-		return _packetDescr;
-	}
-
-	int Sniffer::stopSniffing() {
-		cout << "Stopping sniffer";
+		std::cout << "Stopping sniffer" << std::endl;
 		pcap_breakloop(const_cast<pcap_t*>(_packetDescr));
 		return 0;
 	}
 
-	Sniffer::~Sniffer() {
-		// TODO Auto-generated destructor stub
+	Sniffer::~Sniffer()
+	{
+		// make the vector available for OS
+		// to redeem its memory
+		common::packetDataVector.erase(common::packetDataVector.begin(),
+				common::packetDataVector.end());
 	}
 }

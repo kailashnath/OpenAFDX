@@ -9,14 +9,8 @@
 #ifndef SNIFFER_H_
 #define SNIFFER_H_
 
-#include <vector>
-#include <pcap.h>
-#include <time.h>
 #include <arpa/inet.h>
-#include <iostream>
 #include "common.h"
-
-using namespace std;
 
 namespace network
 {
@@ -35,14 +29,12 @@ namespace network
 
 	public:
 		static int _errorCode;
-		static vector<const u_char*> _packetDataVector;
-
-		Sniffer(pcap_if_t*);
-		int static printInterfaceDetails(void);
-		int static startSniffing(void);
-		int static stopSniffing(void);
-		static void monitorSniffer(void);
-		static const pcap_t* getPcapHandler(void);
+		explicit Sniffer(pcap_if_t*);
+		int static print_iface_details(void);
+		int static start_sniffing(void);
+		int static stop_sniffing(void);
+		static void monitor_sniffer(void);
+		static const pcap_t* get_pcap_handler(void);
 		virtual ~Sniffer(void);
 	};
 }

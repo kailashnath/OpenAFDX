@@ -13,26 +13,26 @@ namespace network
 	Reader::Reader(const char* filename) : _handler(NULL), _errCode(0)
 	{
 		this->_filename = filename;
-		this->openCaptureFile();
+		this->open_capture_file();
 	}
 
-	int Reader::openCaptureFile()
+	int Reader::open_capture_file()
 	{
 		this->_handler = pcap_open_offline(this->_filename, this->_errBuf);
 		if(NULL == this->_handler)
 		{
-			cout << "Failed opening the capture file " << endl;
+			std::cout << "Failed opening the capture file " << std::endl;
 			this->_errCode = -1;
 			return -1;
 		}
 
 		struct bpf_program program;
 		pcap_compile(const_cast<pcap_t*>(_handler), &program,
-								"ip and udp", 1, NULL);
+								common::kafdxFilterExperssion.c_str(), 1, NULL);
 
 		if(pcap_setfilter(const_cast<pcap_t*>(_handler), &program) == -1)
 		{
-			cout << "Error assigning filter " << endl;
+			std::cout << "Error assigning filter " << std::endl;
 			_errCode = -1;
 			return -1;
 		}
@@ -40,12 +40,12 @@ namespace network
 		return 0;
 	}
 
-	void Reader::printDetails(void)
+	void Reader::print_details(void)
 	{
 		u_char* error = NULL;
-		if(-1 == pcap_loop(const_cast<pcap_t*>(this->_handler), 0, pcapCallback, error))
+		if(-1 == pcap_loop(const_cast<pcap_t*>(this->_handler), 0, common::pcapCallback, error))
 		{
-			cout << "Error while reading the capture file : " << error << endl;
+			std::cout << "Error while reading the capture file : " << error << std::endl;
 		}
 	}
 

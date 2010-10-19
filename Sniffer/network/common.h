@@ -20,16 +20,19 @@
 #include <netinet/udp.h>
 #include "Sniffer.h"
 
-using namespace std;
-
 namespace network
 {
-	static vector<const u_char*> packetDataVector;
-	void pcapCallback(u_char*, const struct pcap_pkthdr*, const u_char*);
-	void showPacketDetails(const struct pcap_pkthdr*);
-	void showEthernetDetails(const struct ether_header*);
-	void showIPDetails(const struct iphdr*);
-	void showUDPDetails(const struct udphdr*);
-	void showPayload(const u_char*);
+	class common
+	{
+	public :
+		static const std::string kafdxFilterExperssion;
+		static std::vector<const u_char*> packetDataVector;
+		static void pcapCallback(u_char*, const struct pcap_pkthdr*, const u_char*);
+		static void show_packet_details(const struct pcap_pkthdr*);
+		static void show_ether_details(const struct ether_header*);
+		static void show_ip_details(const struct iphdr*);
+		static void show_udp_details(const struct udphdr*);
+		static void show_payload(const u_char*);
+	};
 }
 #endif /* COMMON_H_ */
