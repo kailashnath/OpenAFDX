@@ -16,10 +16,21 @@ namespace network
 		this->open_capture_file();
 	}
 
+	void Reader::print_details(void)
+	{
+		u_char* error = NULL;
+		if(pcap_loop(const_cast<pcap_t*>(this->_handler), 0,
+				common::pcapCallback, error) == -1)
+		{
+			std::cout << "Error while reading the capture file : " << error
+					<< std::endl;
+		}
+	}
+
 	int Reader::open_capture_file()
 	{
-		this->_handler = pcap_open_offline(this->_filename, this->_errBuf);
-		if(NULL == this->_handler)
+		this->_handler = pcap_open_offline(this->_filename, this->_errbuf);
+		if(this->_handler == NULL)
 		{
 			std::cout << "Failed opening the capture file " << std::endl;
 			this->_errCode = -1;
@@ -38,17 +49,6 @@ namespace network
 		}
 
 		return 0;
-	}
-
-	void Reader::print_details(void)
-	{
-		u_char* error = NULL;
-		if(-1 == pcap_loop(const_cast<pcap_t*>(this->_handler), 0,
-				common::pcapCallback, error))
-		{
-			std::cout << "Error while reading the capture file : " << error
-					<< std::endl;
-		}
 	}
 
 	Reader::~Reader()

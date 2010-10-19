@@ -15,11 +15,6 @@
 namespace network
 {
 	class NetworkConfiguration {
-	private:
-		pcap_if_t* _devices;
-		int _noOfInterfaces;
-		int _userOption;
-		void set_user_option(int);
 
 	public:
 		NetworkConfiguration();
@@ -27,6 +22,12 @@ namespace network
 		bool is_option_valid();
 		pcap_if_t* get_selected_iface();
 		virtual ~NetworkConfiguration();
+
+	private:
+		pcap_if_t* _devices;
+		int _noOfInterfaces;
+		int _userOption;
+		void set_user_option(int);
 
 	};
 }

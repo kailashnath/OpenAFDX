@@ -12,9 +12,9 @@ namespace network
 {
 	NetworkConfiguration::NetworkConfiguration()
 	: _noOfInterfaces(0), _userOption(0) {
-			char errbuf[PCAP_ERRBUF_SIZE];
+			char errbuf[PCAP_errbuf_SIZE];
 
-			if(-1 == pcap_findalldevs(&_devices, errbuf))
+			if(pcap_findalldevs(&_devices, errbuf) == -1)
 				std::cout << "Failed getting all devices";
 	}
 
@@ -26,7 +26,7 @@ namespace network
 
 		std::cout << "Select one of the below interfaces" << std::endl;
 
-		for(currDevice = _devices; NULL != currDevice;
+		for(currDevice = _devices; currDevice != NULL;
 			currDevice = currDevice->next, index++)
 		{
 			std::cout << index << "." << currDevice->name << std::endl;
@@ -41,20 +41,9 @@ namespace network
 		this->set_user_option(choice);
 	}
 
-	void NetworkConfiguration::set_user_option(int option) {
-
-		if(0 == option || option > _noOfInterfaces)
-		{
-			std::cout << "Invalid Option" << std::endl;
-			return;
-		}
-
-		_userOption = option;
-	}
-
 	bool NetworkConfiguration::is_option_valid()
 	{
-		if(0 == _userOption|| _userOption > _noOfInterfaces)
+		if(_userOption == 0 || _userOption > _noOfInterfaces)
 		{
 			return false;
 		}
@@ -70,7 +59,7 @@ namespace network
 		pcap_if_t* currDevice  = NULL;
 		int 	   deviceIndex = 1;
 
-		for(currDevice = _devices; NULL != currDevice;
+		for(currDevice = _devices; currDevice != NULL;
 				currDevice = currDevice->next, deviceIndex++)
 		{
 			if(deviceIndex == _userOption)
@@ -78,6 +67,17 @@ namespace network
 		}
 
 		return currDevice;
+	}
+
+	void NetworkConfiguration::set_user_option(int option) {
+
+		if(option == 0 || option > _noOfInterfaces)
+		{
+			std::cout << "Invalid Option" << std::endl;
+			return;
+		}
+
+		_userOption = option;
 	}
 
 	NetworkConfiguration::~NetworkConfiguration() {

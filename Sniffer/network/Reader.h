@@ -15,17 +15,17 @@ namespace network
 {
 	class Reader
 	{
-	private:
-		const char* _filename;
-		const pcap_t* _handler;
-		char _errBuf[PCAP_ERRBUF_SIZE];
-		int _errCode;
-		int open_capture_file();
-
 	public:
 		Reader(const char*);
 		void print_details();
 		virtual ~Reader();
+
+	private:
+		const char* _filename;
+		const pcap_t* _handler;
+		char _errbuf[PCAP_errbuf_SIZE];
+		int _errCode;
+		int open_capture_file();
 	};
 }
 #endif /* READER_H_ */

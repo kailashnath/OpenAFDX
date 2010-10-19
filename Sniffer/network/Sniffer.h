@@ -16,8 +16,18 @@ namespace network
 {
 	class Sniffer
 	{
+
+	public:
+		static int _errorCode;
+		explicit Sniffer(pcap_if_t*);
+		int static print_iface_details(void);
+		int static start_sniffing(void);
+		int static stop_sniffing(void);
+		static void monitor_sniffer(void);
+		virtual ~Sniffer(void);
+
 	private:
-		static char _errbuf[PCAP_ERRBUF_SIZE];
+		static char _errbuf[PCAP_errbuf_SIZE];
 		static pcap_if_t* _interface;
 		static struct in_addr _addr;
 		static bpf_u_int32 _netp;
@@ -27,15 +37,6 @@ namespace network
 		// packet descriptor
 		static const pcap_t* _packetDescr;
 
-	public:
-		static int _errorCode;
-		explicit Sniffer(pcap_if_t*);
-		int static print_iface_details(void);
-		int static start_sniffing(void);
-		int static stop_sniffing(void);
-		static void monitor_sniffer(void);
-		static const pcap_t* get_pcap_handler(void);
-		virtual ~Sniffer(void);
 	};
 }
 #endif /* SNIFFER_H_ */

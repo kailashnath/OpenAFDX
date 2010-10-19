@@ -18,7 +18,7 @@ namespace network
 	int           Sniffer::_errorCode   = 0;
 
 	struct in_addr 		  Sniffer::_addr;
-	char 		   		  Sniffer::_errbuf[PCAP_ERRBUF_SIZE];
+	char 		   		  Sniffer::_errbuf[PCAP_errbuf_SIZE];
 
 	// global static variable which holds the list of all
 	// packets being captured.
@@ -27,12 +27,12 @@ namespace network
 	Sniffer::Sniffer(pcap_if_t* interface)
 	{
 
-		if(NULL != _packetDescr)
+		if(_packetDescr != NULL)
 		{
 			std::cout << "Sniffer already running !" << std::endl;
 			return;
 		}
-		else if (NULL == interface)
+		else if (interface == NULL)
 		{
 			std::cout << "Interface cannot be null" << std::endl;
 			_errorCode = -1;
@@ -41,10 +41,10 @@ namespace network
 
 		Sniffer::_interface = interface;
 		std::cout << "Initializing sniffer on : " << Sniffer::_interface->name
-				<< std::endl;
+                  << std::endl;
 
-		if(-1 == pcap_lookupnet(Sniffer::_interface->name,
-				&_netp, &_maskp, _errbuf))
+		if(pcap_lookupnet(Sniffer::_interface->name,
+				&_netp, &_maskp, _errbuf) == -1)
 		{
 			std::cout << "Error : " << _errbuf << std::endl;
 			_errorCode = -1;
@@ -56,7 +56,7 @@ namespace network
 		char* net;
 		char* mask;
 
-		if(NULL == _netp || NULL == _maskp)
+		if(_netp == NULL || _maskp == NULL)
 		{
 			std::cout << "Sniffer was not initialized properly" << std::endl;
 			_errorCode = -1;
@@ -82,7 +82,7 @@ namespace network
 		static u_char* error;
 		struct bpf_program program;
 
-		if(NULL == _interface)
+		if(_interface == NULL)
 		{
 			std::cout << "Undefined interface";
 			Sniffer::_errorCode = -1;
@@ -91,9 +91,9 @@ namespace network
 
 		_packetDescr = pcap_open_live(_interface->name, BUFSIZ,
 					                 0, -1, _errbuf);
-		if(NULL == _packetDescr) {
+		if( _packetDescr == NULL) {
 			std::cout << "Failed opening on interface. Error : "
-					<< _errbuf << std::endl;
+                      << _errbuf << std::endl;
 			return -1;
 		}
 
@@ -106,7 +106,7 @@ namespace network
 		pcap_compile(const_cast<pcap_t*>(_packetDescr), &program,
 				common::kafdxFilterExperssion.c_str(), 1, _netp);
 
-		if (-1 == pcap_setfilter(const_cast<pcap_t*>(_packetDescr), &program))
+		if (pcap_setfilter(const_cast<pcap_t*>(_packetDescr), &program) == -1)
 		{
 			std::cout << "Failed setting the AFDX filter" << std::endl;
 			_errorCode = -1;
@@ -119,6 +119,13 @@ namespace network
 		return 0;
 	}
 
+	int Sniffer::stop_sniffing()
+	{
+		std::cout << "Stopping sniffer" << std::endl;
+		pcap_breakloop(const_cast<pcap_t*>(_packetDescr));
+		return 0;
+	}
+
 	// code written temporarily for testing purposes.
 	// TODO Delete this function. :)
 	void Sniffer::monitor_sniffer(void)
@@ -126,18 +133,11 @@ namespace network
 		while(true)
 		{
 			std::cout << "Vector size is : "
-					<< common::packetDataVector.size() << std::endl;
+                      << common::packetDataVector.size() << std::endl;
 			sleep(1);
 		}
 
 		Sniffer::stop_sniffing();
-	}
-
-	int Sniffer::stop_sniffing()
-	{
-		std::cout << "Stopping sniffer" << std::endl;
-		pcap_breakloop(const_cast<pcap_t*>(_packetDescr));
-		return 0;
 	}
 
 	Sniffer::~Sniffer()
