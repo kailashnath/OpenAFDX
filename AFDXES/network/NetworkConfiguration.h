@@ -14,8 +14,8 @@
 
 namespace network
 {
-	class NetworkConfiguration {
-
+	class NetworkConfiguration
+	{
 	public:
 		NetworkConfiguration();
 		void show_user_options();

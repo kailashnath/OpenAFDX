@@ -18,7 +18,7 @@ namespace network
 	int           Sniffer::_errorCode   = 0;
 
 	struct in_addr 		  Sniffer::_addr;
-	char 		   		  Sniffer::_errbuf[PCAP_errbuf_SIZE];
+	char 		   		  Sniffer::_errbuf[PCAP_ERRBUF_SIZE];
 
 	// global static variable which holds the list of all
 	// packets being captured.

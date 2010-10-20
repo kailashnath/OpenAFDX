@@ -23,7 +23,7 @@ namespace network
 	private:
 		const char* _filename;
 		const pcap_t* _handler;
-		char _errbuf[PCAP_errbuf_SIZE];
+		char _errbuf[PCAP_ERRBUF_SIZE];
 		int _errCode;
 		int open_capture_file();
 	};

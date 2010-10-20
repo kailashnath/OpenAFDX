@@ -16,7 +16,6 @@ namespace network
 {
 	class Sniffer
 	{
-
 	public:
 		static int _errorCode;
 		explicit Sniffer(pcap_if_t*);
@@ -27,7 +26,7 @@ namespace network
 		virtual ~Sniffer(void);
 
 	private:
-		static char _errbuf[PCAP_errbuf_SIZE];
+		static char _errbuf[PCAP_ERRBUF_SIZE];
 		static pcap_if_t* _interface;
 		static struct in_addr _addr;
 		static bpf_u_int32 _netp;

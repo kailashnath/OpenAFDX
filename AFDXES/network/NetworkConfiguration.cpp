@@ -12,7 +12,7 @@ namespace network
 {
 	NetworkConfiguration::NetworkConfiguration()
 	: _noOfInterfaces(0), _userOption(0) {
-			char errbuf[PCAP_errbuf_SIZE];
+			char errbuf[PCAP_ERRBUF_SIZE];
 
 			if(pcap_findalldevs(&_devices, errbuf) == -1)
 				std::cout << "Failed getting all devices";
