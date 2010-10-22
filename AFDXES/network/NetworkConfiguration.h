@@ -23,6 +23,10 @@ namespace network
 		pcap_if_t* get_selected_iface();
 		virtual ~NetworkConfiguration();
 
+		static const short NETWORK_AB = 0;
+		static const short NETWORK_A = 1;
+		static const short NETWORK_B = 2;
+
 	private:
 		pcap_if_t* _devices;
 		int _noOfInterfaces;

@@ -10,11 +10,12 @@
 #include <stdlib.h>
 #include <iostream>
 #include <boost/thread.hpp>
-
+#include <sys/types.h>
 #include "network/NetworkConfiguration.h"
 #include "network/Sniffer.h"
 #include "network/Reader.h"
 #include "parser/ICDParser.h"
+#include "network/protocol/AFDX.h"
 
 using namespace std;
 using namespace network;
@@ -24,9 +25,9 @@ const char* filename = "/media/439385db-7b6b-4585-a6ae-bd5553ca10d7/"
 
 int main(void)
 {
-	parser::ICDParser icd_parser("/home/robuntu/Releases/PythonScripts/Linux/ICD/CPIOM_ICDcompleted.csv");
-	cout << icd_parser.is_icd_valid();
-	icd_parser.load_objects_from_icd();
+	protocol::AFDX afdx;
+	//afdx.build_raw_packet();
+	//afdx.build_packet();
 	/*NetworkConfiguration nc;
 	nc.show_user_options();
 	Reader r(filename);

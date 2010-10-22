@@ -22,9 +22,9 @@ namespace parser
 		{
 			getline(_inputICD, line, '\n');
 
-
 			if(line.rfind("AFDX_OUTPUT_VL", 1) != std::string::npos)
 			{
+				// TODO load output vl objects
 				std::cout << line << " Size is : " << line.size() << std::endl;
 				_lines.push_back(line);
 			}
