@@ -24,8 +24,8 @@
 #include <netinet/udp.h>
 
 #include "../NetworkConfiguration.h"
-#include "../Transmitter.h"
-#include "common.h"
+//#include "../Transmitter.h"
+#include "../common.h"
 
 #define AFDX_BUFFER_SIZE 4096
 

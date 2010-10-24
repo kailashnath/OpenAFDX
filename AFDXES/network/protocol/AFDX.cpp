@@ -6,7 +6,6 @@
  *      Email : kailashnathreddy@ymail.com or knr413@gmail.com
  */
 
-
 #include "AFDX.h"
 
 namespace network
@@ -73,7 +72,7 @@ namespace network
 			udp_header->dest = htons(2525);
 			udp_header->source = htons(4545);
 			udp_header->len = htons(sizeof(struct udphdr) + 5);
-			ip_header->check = network::protocol::csum(
+			ip_header->check = network::csum(
 					(unsigned short*) datagram, ip_header->tot_len >> 1);
 
 			char* payload = datagram + ip_header->tot_len - 5;
@@ -131,7 +130,7 @@ namespace network
 			ip_header->check 	= _ip_checksum;
 			ip_header->saddr 	= inet_addr(_ip_saddr);
 			ip_header->daddr 	= inet_addr(_ip_daddr);
-			ip_header->check 	= network::protocol::csum(
+			ip_header->check 	= network::csum(
 					(unsigned short*) (_datagram + sizeof(struct ether_header)),
 					ip_total_length >> 1);
 
@@ -141,11 +140,12 @@ namespace network
 			udp_header->check  = _udp_checksum;
 			udp_header->len    = htons(sizeof(struct udphdr));
 
-			Transmitter t(const_cast<char*>("eth0"), NULL);
+			/*Transmitter t(const_cast<char*>("eth0"), NULL);
 
 			if(t.do_transmit(const_cast<u_char*>(_datagram),
 					_iface, size_index, 100, true) < 0)
 				std::cout << "Error !" << std::endl;
+				*/
 		}
 
 		AFDX::~AFDX()

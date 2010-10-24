@@ -26,5 +26,6 @@ SUBDIRS := \
 parser \
 network/protocol \
 network \
+config \
 . \
 
