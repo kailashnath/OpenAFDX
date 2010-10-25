@@ -27,6 +27,7 @@
 #include "../Transmitter.h"
 #include "../common.h"
 #include "../../config/VirtualLink.h"
+#include "../../commands/CommandString.h"
 
 #define AFDX_BUFFER_SIZE 4096
 
@@ -38,7 +39,7 @@ namespace network
 		public:
 			AFDX();
 			AFDX(config::VirtualLink&);
-			void build_packet(unsigned char*);
+			void build_packet(commands::command_string&);
 			virtual ~AFDX();
 
 		protected:

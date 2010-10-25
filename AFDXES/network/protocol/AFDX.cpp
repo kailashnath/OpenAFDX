@@ -44,11 +44,11 @@ namespace network
 			memset(_datagram, 0, AFDX_BUFFER_SIZE);
 		}
 
-		void AFDX::build_packet(unsigned char* data_payload)
+		void AFDX::build_packet(commands::command_string& data_payload)
 		{
 			int size_index = 0;
 			_payload = (char*)"kailash";
-			std::cout << "Payload : " << data_payload[0] << std::endl;
+			std::cout << "Payload : " << data_payload.values[1] << std::endl;
 			struct ether_header* ethhdr =
 					(struct ether_header*) _datagram;
 			size_index = sizeof(struct ether_header);

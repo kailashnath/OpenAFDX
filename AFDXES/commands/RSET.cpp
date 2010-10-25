@@ -22,11 +22,11 @@ namespace commands
 		std::cout << RSET::_command << std::endl;
 	}
 
-	const commands::command_string RSET::get_command_str()
+	commands::command_string RSET::get_command_str()
 	{
 		unsigned char command[2];
 		command_string cmd;
-		command[0] = 0x02;
+		command[0] = 0x00;
 		command[1] = 'k';
 		cmd.values = command;
 		return cmd;

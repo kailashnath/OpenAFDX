@@ -39,7 +39,8 @@ int main(void)
 
 	config::VirtualLink rst_vl = outputs[1];
 	network::protocol::AFDX afdx(rst_vl);
-	afdx.build_packet(rset.get_command_str().values);
+	std::cout << "Val " << rset.get_command_str().values << std::endl;
+	std::cout << "Ref ;: " << rset.get_command_str().values << std::endl;
 
 	//afdx.build_raw_packet();
 	//afdx.build_packet();
