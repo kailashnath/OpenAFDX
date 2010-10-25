@@ -18,8 +18,8 @@
 
 namespace config
 {
-	const static short TYPE_OUTPUT = 1;
-	const static short TYPE_INPUT  = 2;
+	const static unsigned short TYPE_OUTPUT = 1;
+	const static unsigned short TYPE_INPUT  = 2;
 
 	class VirtualLink
 	{
@@ -43,16 +43,16 @@ namespace config
 			unsigned short _dst_udp;
 			unsigned short _buff_size;
 
-			char* _phys_port_id;
-			char* _pin_name;
-			char* _line_emc_protection;
+			std::string _phys_port_id;
+			std::string _pin_name;
+			std::string _line_emc_protection;
 			char _network_id;
-			char* _connector_name;
-			char* _vl_name;
-			char* _network_select;
-			char* _port_master_name;
-			char* _src_ip;
-			char* _dst_ip;
+			std::string _connector_name;
+			std::string _vl_name;
+			std::string _network_select;
+			std::string _port_master_name;
+			std::string _src_ip;
+			std::string _dst_ip;
 
 			bool _ip_frag_allowed;
 

@@ -27,5 +27,6 @@ parser \
 network/protocol \
 network \
 config \
+commands \
 . \
 

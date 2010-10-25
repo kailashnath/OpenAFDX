@@ -15,21 +15,35 @@
 #include "headers/network/Sniffer.h"
 #include "headers/network/Reader.h"
 #include "headers/parser/ICDParser.h"
-
+#include "headers/config/VirtualLink.h"
+#include "headers/commands/RSET.h"
+#include "headers/network/protocol/AFDX.h"
 
 using namespace std;
 using namespace network;
 
 const char* filename = "/media/439385db-7b6b-4585-a6ae-bd5553ca10d7/"
 		"Releases/ITR-ES-003-RELEASE/captures/ITR-ES-003.cap";
-const char* icd_file = "/home/kailash/Github/ICD/newicd.csv";
+const char* icd_file = "/home/robuntu/Releases/PythonScripts/Linux/ICD/"
+		"newicd.csv";
 
 int main(void)
 {
+	commands::RSET rset;
 	parser::ICDParser parser(icd_file);
 	parser.load_objects_from_icd();
+	std::vector<config::VirtualLink> outputs =
+			parser.get_objects(config::TYPE_OUTPUT);
+	cout << "No of output vls = " << outputs.size() << endl;
+	parser.cleanup();
+
+	config::VirtualLink rst_vl = outputs[1];
+	network::protocol::AFDX afdx(rst_vl);
+	afdx.build_packet(rset.get_command_str().values);
+
 	//afdx.build_raw_packet();
 	//afdx.build_packet();
+
 	/*NetworkConfiguration nc;
 	nc.show_user_options();
 	Reader r(filename);

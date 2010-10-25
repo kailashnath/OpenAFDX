@@ -24,8 +24,9 @@ namespace parser
 	public:
 		ICDParser(const char* filename);
 		bool is_icd_valid(void);
-		void load_objects_from_icd(void);
-		void get_objects(short type);
+		unsigned short load_objects_from_icd(void);
+		std::vector<config::VirtualLink> get_objects(short type);
+		void cleanup(void);
 		virtual ~ICDParser();
 
 	private:

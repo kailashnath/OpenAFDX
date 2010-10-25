@@ -6,6 +6,7 @@
  */
 
 const static short DEFAULT = 0;
+const static char DEFAULT_NETWORK = 'A';
 
 const static short PORT_SAMPLING = 1;
 const static short PORT_QUEUING = 2;
