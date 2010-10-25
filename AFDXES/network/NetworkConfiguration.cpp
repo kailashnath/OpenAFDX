@@ -6,7 +6,7 @@
  *      Email : kailashnathreddy@ymail.com or knr413@gmail.com
  */
 
-#include "NetworkConfiguration.h"
+#include "../headers/network/NetworkConfiguration.h"
 
 namespace network
 {

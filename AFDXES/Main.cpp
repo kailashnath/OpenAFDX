@@ -11,10 +11,10 @@
 #include <iostream>
 #include <boost/thread.hpp>
 #include <sys/types.h>
-#include "network/NetworkConfiguration.h"
-#include "network/Sniffer.h"
-#include "network/Reader.h"
-#include "parser/ICDParser.h"
+#include "headers/network/NetworkConfiguration.h"
+#include "headers/network/Sniffer.h"
+#include "headers/network/Reader.h"
+#include "headers/parser/ICDParser.h"
 
 
 using namespace std;

@@ -7,18 +7,21 @@ CPP_SRCS += \
 ../network/NetworkConfiguration.cpp \
 ../network/Reader.cpp \
 ../network/Sniffer.cpp \
+../network/Transmitter.cpp \
 ../network/common.cpp 
 
 OBJS += \
 ./network/NetworkConfiguration.o \
 ./network/Reader.o \
 ./network/Sniffer.o \
+./network/Transmitter.o \
 ./network/common.o 
 
 CPP_DEPS += \
 ./network/NetworkConfiguration.d \
 ./network/Reader.d \
 ./network/Sniffer.d \
+./network/Transmitter.d \
 ./network/common.d 
 
 

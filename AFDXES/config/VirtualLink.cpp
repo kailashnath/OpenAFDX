@@ -5,7 +5,7 @@
  *      Author: root
  */
 
-#include "VirtualLink.h"
+#include "../headers/config/VirtualLink.h"
 
 namespace config
 {

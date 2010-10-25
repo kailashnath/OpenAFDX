@@ -4,13 +4,16 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
-../network/protocol/AFDX.cpp 
+../network/protocol/AFDX.cpp \
+../network/protocol/common.cpp 
 
 OBJS += \
-./network/protocol/AFDX.o 
+./network/protocol/AFDX.o \
+./network/protocol/common.o 
 
 CPP_DEPS += \
-./network/protocol/AFDX.d 
+./network/protocol/AFDX.d \
+./network/protocol/common.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

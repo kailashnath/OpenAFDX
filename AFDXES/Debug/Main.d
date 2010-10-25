@@ -1,20 +1,21 @@
-Main.d Main.o: ../Main.cpp ../network/NetworkConfiguration.h \
- ../network/Sniffer.h ../network/common.h ../network/Sniffer.h \
- ../network/Reader.h ../parser/ICDParser.h \
- ../parser/../config/VirtualLink.h ../parser/../config/common.h
+Main.d Main.o: ../Main.cpp ../headers/network/NetworkConfiguration.h \
+ ../headers/network/Sniffer.h ../headers/network/common.h \
+ ../headers/network/Sniffer.h ../headers/network/Reader.h \
+ ../headers/parser/ICDParser.h ../headers/parser/../config/VirtualLink.h \
+ ../headers/parser/../config/common.h
 
-../network/NetworkConfiguration.h:
+../headers/network/NetworkConfiguration.h:
 
-../network/Sniffer.h:
+../headers/network/Sniffer.h:
 
-../network/common.h:
+../headers/network/common.h:
 
-../network/Sniffer.h:
+../headers/network/Sniffer.h:
 
-../network/Reader.h:
+../headers/network/Reader.h:
 
-../parser/ICDParser.h:
+../headers/parser/ICDParser.h:
 
-../parser/../config/VirtualLink.h:
+../headers/parser/../config/VirtualLink.h:
 
-../parser/../config/common.h:
+../headers/parser/../config/common.h:

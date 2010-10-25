@@ -6,10 +6,8 @@
  *      Email : kailashnathreddy@ymail.com or knr413@gmail.com
  */
 
-#include "common.h"
+#include "../../headers/network/protocol/common.h"
 
-namespace network
-{
 	namespace protocol
 	{
 		unsigned short csum (unsigned short* buf, int nwords)
@@ -22,4 +20,3 @@ namespace network
 		  return ~sum;
 		}
 	}
-}
