@@ -22,14 +22,15 @@ namespace commands
 		std::cout << RSET::_command << std::endl;
 	}
 
-	commands::command_string RSET::get_command_str()
+	void RSET::build_command_str(commands::command_string& cmd)
 	{
 		unsigned char command[2];
-		command_string cmd;
 		command[0] = 0x00;
 		command[1] = 'k';
-		cmd.values = command;
-		return cmd;
+		cmd.data = new unsigned char[2];
+		std::cout << sizeof(cmd.data) << std::endl;
+		cmd.length = 2;
+		bcopy(command, cmd.data, 2);
 	}
 
 	RSET::~RSET()
