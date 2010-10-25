@@ -34,5 +34,6 @@ namespace network
 		static void show_udp_details(const struct udphdr*);
 		static void show_payload(const u_char*);
 	};
+	unsigned short csum(unsigned short*, int);
 }
 #endif /* COMMON_H_ */

@@ -82,4 +82,17 @@ namespace network
 	{
 		std::cout << data << std::endl;
 	}
+
+	unsigned short csum(unsigned short* data, int len_2s)
+	{
+		unsigned short checksum = 0;
+		while(len_2s > 1)
+		{
+			checksum += *data++;
+			--len_2s;
+		}
+		checksum = (checksum >> 16) + (checksum & 0xFFFF);
+		checksum += (checksum >> 16);
+		return ~(checksum);
+	}
 }
