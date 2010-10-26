@@ -28,6 +28,7 @@ namespace config
 	{
 		public:
 			VirtualLink(std::vector<std::string>& values);
+			static config::VirtualLink* get_default_vl();
 			VirtualLink();
 
 			virtual ~VirtualLink();
@@ -56,7 +57,9 @@ namespace config
 			std::string _port_master_name;
 			std::string _src_ip;
 			std::string _dst_ip;
-			std::string _src_mac;
+			std::string _dst_mac;
+
+			bool _type_command;
 
 			bool _ip_frag_allowed;
 

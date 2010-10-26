@@ -14,6 +14,14 @@
 #include <string>
 #include "stdio.h"
 
+#define SRC_MAC "02:00:00:00:00:40"
+#define DST_MAC "03:00:00:00:00:40"
+#define DST_MAC_PREFIX "03:00:00:00"
+#define TE_IP "10.1.33.0"
+#define ES_IP "10.2.33.0"
+#define UDP_SRC 50025
+#define UDP_DST 50025
+
 namespace network
 {
 	namespace protocol

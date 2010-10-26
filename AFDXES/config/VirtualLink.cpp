@@ -67,11 +67,9 @@ namespace config
 		_src_udp = atoi(values[22].c_str());
 		_dst_udp = atoi(values[23].c_str());
 		_buff_size = atoi(values[24].c_str());
+		_dst_mac = DST_MAC_PREFIX;
+		_dst_mac.append(network::protocol::vltomac(_vl_id));
 
-		_src_mac = "02:00:00:08";
-		_src_mac.append(network::protocol::vltomac(_vl_id));
-
-		std::cout << "Src mac address is " << _src_mac << std::endl;
 	}
 
 	void VirtualLink::init(void)
@@ -90,7 +88,17 @@ namespace config
 		_dst_udp = DEFAULT;
 		_ip_frag_allowed = false;
 		_network_id = DEFAULT_NETWORK;
+		_type_command = false;
 	}
+
+	config::VirtualLink* VirtualLink::get_default_vl()
+	{
+		config::VirtualLink* vl = new config::VirtualLink();
+		vl->_buff_size = 8192;
+
+		return vl;
+	}
+
 	VirtualLink::~VirtualLink()
 	{
 		// TODO Auto-generated destructor stub

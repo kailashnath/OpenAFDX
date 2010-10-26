@@ -39,7 +39,7 @@ int main(void)
 	parser.cleanup();
 
 	config::VirtualLink rst_vl = outputs[1];
-
+	rst_vl._type_command = false;
 	network::protocol::AFDX afdx(rst_vl);
 	commands::command_string cmd;
 	rset.build_command_str(cmd);

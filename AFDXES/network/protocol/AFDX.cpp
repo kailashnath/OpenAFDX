@@ -21,13 +21,26 @@ namespace network
 		AFDX::AFDX(config::VirtualLink& vl)
 		{
 			init();
-			_eth_src_mac = vl._src_mac;
-			_eth_dst_mac = "02:00:00:00:00:05";
-			_ip_daddr = vl._dst_ip;
-			_ip_saddr = vl._src_ip;
+
+			_eth_src_mac = SRC_MAC;
+
+			if(vl._type_command)
+			{
+				_eth_dst_mac = DST_MAC;
+				_ip_saddr = TE_IP;
+				_ip_daddr = ES_IP;
+				_udp_source = UDP_SRC;
+				_udp_dest = UDP_DST;
+			}
+			else
+			{
+				_eth_dst_mac = vl._dst_mac;
+				_ip_daddr = vl._dst_ip;
+				_ip_saddr = vl._src_ip;
+				_udp_dest = vl._dst_udp;
+				_udp_source = vl._src_udp;
+			}
 			_ip_id = random();
-			_udp_dest = vl._dst_udp;
-			_udp_source = vl._src_udp;
 			_iface = network::NetworkConfiguration::NETWORK_A;
 		}
 
