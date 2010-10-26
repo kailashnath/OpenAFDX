@@ -15,6 +15,5 @@ namespace commands
 	{
 		unsigned char* values;
 	};
-
 }
 #endif /* COMMANDSTRING_H_ */
