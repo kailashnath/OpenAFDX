@@ -42,8 +42,9 @@ int main(void)
 	rst_vl._type_command = false;
 	network::protocol::AFDX afdx(rst_vl);
 	commands::command_string cmd;
-	rset.build_command_str(cmd);
+	rset.build_command(cmd);
 	afdx.build_packet(cmd);
+	afdx.send();
 
 	/*NetworkConfiguration nc;
 	nc.show_user_options();

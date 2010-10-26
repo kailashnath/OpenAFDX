@@ -42,6 +42,7 @@ namespace network
 			AFDX();
 			AFDX(config::VirtualLink&);
 			void build_packet(commands::command_string&);
+			void send(void);
 			virtual ~AFDX();
 
 		protected:
@@ -69,8 +70,9 @@ namespace network
 			char* _payload;
 			short _iface;
 		private:
-			void init(void);
+			int _datagram_size;
 			u_char _datagram[AFDX_BUFFER_SIZE];
+			void init(void);
 		};
 	}
 }

@@ -17,12 +17,7 @@ namespace commands
 
 	}
 
-	void RSET::build()
-	{
-		std::cout << RSET::_command << std::endl;
-	}
-
-	void RSET::build_command_str(commands::command_string& cmdstr)
+	void RSET::build_command(commands::command_string& cmdstr)
 	{
 		int size = sizeof(struct command);
 		unsigned char buffer[size];

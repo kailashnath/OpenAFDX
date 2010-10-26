@@ -30,7 +30,7 @@ namespace commands
 	public:
 		RSET();
 		void build(void);
-		void build_command_str(command_string&);
+		void build_command(command_string&);
 		virtual ~RSET();
 	private:
 		const static char* _command;

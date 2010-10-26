@@ -27,18 +27,18 @@ namespace network
 			if(vl._type_command)
 			{
 				_eth_dst_mac = DST_MAC;
-				_ip_saddr = TE_IP;
-				_ip_daddr = ES_IP;
-				_udp_source = UDP_SRC;
-				_udp_dest = UDP_DST;
+				_ip_saddr 	 = TE_IP;
+				_ip_daddr 	 = ES_IP;
+				_udp_source  = UDP_SRC;
+				_udp_dest	 = UDP_DST;
 			}
 			else
 			{
 				_eth_dst_mac = vl._dst_mac;
-				_ip_daddr = vl._dst_ip;
-				_ip_saddr = vl._src_ip;
-				_udp_dest = vl._dst_udp;
-				_udp_source = vl._src_udp;
+				_ip_daddr 	 = vl._dst_ip;
+				_ip_saddr 	 = vl._src_ip;
+				_udp_dest 	 = vl._dst_udp;
+				_udp_source  = vl._src_udp;
 			}
 			_ip_id = random();
 			_iface = network::NetworkConfiguration::NETWORK_A;
@@ -47,19 +47,18 @@ namespace network
 		void AFDX::init()
 		{
 			_eth_type = ntohs(ETHERTYPE_IP);
-			_ip_ihl = 5;
-			_ip_version = 4;
-			_ip_tos = 0;
-			_ip_ttl = 255;
-			_ip_protocol = 0x11;
-			_udp_checksum = 0x00;
-
+			_ip_ihl 	   = 5;
+			_ip_version    = 4;
+			_ip_tos 	   = 0;
+			_ip_ttl 	   = 255;
+			_ip_protocol   = 0x11;
+			_udp_checksum  = 0x00;
+			_datagram_size = 0;
 			memset(_datagram, 0, AFDX_BUFFER_SIZE);
 		}
 
 		void AFDX::build_packet(commands::command_string& data_payload)
 		{
-			int size_index = 0;
 			int payload_size = data_payload.length;
 			int padding_size = 0;
 
@@ -68,15 +67,15 @@ namespace network
 
 			struct ether_header* ethhdr =
 					(struct ether_header*) _datagram;
-			size_index = sizeof(struct ether_header);
+			_datagram_size = sizeof(struct ether_header);
 
 			struct iphdr* ip_header =
-					(struct iphdr* )(_datagram + size_index);
-			size_index += sizeof(struct iphdr);
+					(struct iphdr* )(_datagram + _datagram_size);
+			_datagram_size += sizeof(struct iphdr);
 
 			struct udphdr* udp_header =
-					(struct udphdr*)(_datagram + size_index);
-			size_index += sizeof(struct udphdr);
+					(struct udphdr*)(_datagram + _datagram_size);
+			_datagram_size += sizeof(struct udphdr);
 
 			// add ethernet details
 			ethhdr->ether_type = ntohs(ETHERTYPE_IP);
@@ -91,14 +90,14 @@ namespace network
 
 			// calculate the total length of the Datagram. This value goes
 			// into the ip->len
-			int ip_total_length = size_index - sizeof(struct ether_header);
+			int ip_total_length = _datagram_size - sizeof(struct ether_header);
 
 			// add ip details
-			ip_header->ihl 	   = _ip_ihl;
-			ip_header->version = _ip_version;
-			ip_header->tos 	   = _ip_tos;
-			ip_header->tot_len = htons(ip_total_length + payload_size);
-			ip_header->id 	   = htons(_ip_id);
+			ip_header->ihl 	    = _ip_ihl;
+			ip_header->version  = _ip_version;
+			ip_header->tos 	    = _ip_tos;
+			ip_header->tot_len  = htons(ip_total_length + payload_size);
+			ip_header->id 	    = htons(_ip_id);
 			ip_header->frag_off = _ip_frag_off;
 			ip_header->ttl 		= _ip_ttl;
 			ip_header->protocol = _ip_protocol;
@@ -114,31 +113,34 @@ namespace network
 			udp_header->source = htons(_udp_source);
 			udp_header->check  = _udp_checksum;
 			udp_header->len    = htons(sizeof(struct udphdr) + payload_size);
-			std::cout << "Payload size is" << payload_size << std::endl;
 
-			bcopy(data_payload.data, _datagram + size_index, payload_size );
-			size_index += payload_size;
+			bcopy(data_payload.data, _datagram + _datagram_size, payload_size );
+			_datagram_size += payload_size;
 
 			// this part takes care of padding part for AFDX
 			if(padding_size > 0)
 			{
 				unsigned char padding[padding_size];
 				memset(padding, 0x00, padding_size);
-				bcopy(padding, _datagram + size_index, padding_size);
-				size_index += padding_size;
+				bcopy(padding, _datagram + _datagram_size, padding_size);
+				_datagram_size += padding_size;
 			}
 
 			// this part takes care of adding the packet sequence number
 			{
-				_datagram[size_index] =	config::SequenceHandler::get_vl_sn(1);
-				size_index += 1;
+				_datagram[_datagram_size] =	config::SequenceHandler::get_vl_sn(1);
+				_datagram_size += 1;
 			}
 
-			network::Transmitter t(const_cast<char*>("eth0"), NULL);
+		}
 
-			if(t.do_transmit(const_cast<u_char*>(_datagram), size_index,
-					_iface, 5, true) < 0)
-				std::cout << "Error !" << std::endl;
+		void AFDX::send()
+		{
+			network::Transmitter tx(const_cast<char*>("eth0"), NULL);
+			if(tx.do_transmit(const_cast<u_char*>(_datagram), _datagram_size,
+								_iface, 5, true) < 0)
+			std::cout << "Error !" << std::endl;
+
 		}
 
 		AFDX::~AFDX()

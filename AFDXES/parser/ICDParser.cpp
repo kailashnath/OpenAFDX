@@ -43,6 +43,7 @@ namespace parser
 				boost::split(values, line, boost::is_any_of(";"));
 				config::VirtualLink link(values);
 				link._type = config::TYPE_OUTPUT;
+
 				_output_vl.push_back(link);
 			}
 			else if(line.rfind("AFDX_INPUT_VL", 0) != std::string::npos)
