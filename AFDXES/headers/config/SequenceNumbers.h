@@ -24,7 +24,6 @@ namespace config
 	private:
 		static unsigned int te_sn;
 		static std::map<unsigned int, unsigned int> vl_sn_map;
-
 	};
 }
 

@@ -15,6 +15,8 @@ namespace config
 
 	unsigned int SequenceHandler::get_te_sn()
 	{
+		if(te_sn == 65536)
+			te_sn = 0;
 		++te_sn;
 		return (te_sn - 1);
 	}
@@ -22,7 +24,9 @@ namespace config
 	unsigned int SequenceHandler::get_vl_sn(unsigned int vl_id)
 	{
 		unsigned int sn = SequenceHandler::vl_sn_map[vl_id];
+		if(sn == 255)
+			sn = 0;
 		SequenceHandler::vl_sn_map[vl_id] = sn + 1;
-		return sn;
+		return sn + 1;
 	}
 }

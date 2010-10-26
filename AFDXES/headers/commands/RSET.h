@@ -11,12 +11,20 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <netinet/in.h>
 #include <boost/format.hpp>
-#include "../config/SequenceNumbers.h"
+
 #include "CommandString.h"
+#include "../config/SequenceNumbers.h"
 
 namespace commands
 {
+	struct command
+	{
+		unsigned short int sn;
+		unsigned char cmd[4];
+	};
+
 	class RSET
 	{
 	public:

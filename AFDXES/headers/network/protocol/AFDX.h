@@ -23,11 +23,13 @@
 #include <arpa/inet.h>
 #include <netinet/udp.h>
 
+#include "common.h"
 #include "../NetworkConfiguration.h"
 #include "../Transmitter.h"
 #include "../common.h"
 #include "../../config/VirtualLink.h"
 #include "../../commands/CommandString.h"
+#include "../../config/SequenceNumbers.h"
 
 #define AFDX_BUFFER_SIZE 4096
 

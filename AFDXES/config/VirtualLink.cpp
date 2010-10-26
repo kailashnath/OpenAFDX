@@ -68,6 +68,10 @@ namespace config
 		_dst_udp = atoi(values[23].c_str());
 		_buff_size = atoi(values[24].c_str());
 
+		_src_mac = "02:00:00:08";
+		_src_mac.append(network::protocol::vltomac(_vl_id));
+
+		std::cout << "Src mac address is " << _src_mac << std::endl;
 	}
 
 	void VirtualLink::init(void)

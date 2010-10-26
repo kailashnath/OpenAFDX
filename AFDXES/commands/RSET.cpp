@@ -22,15 +22,20 @@ namespace commands
 		std::cout << RSET::_command << std::endl;
 	}
 
-	void RSET::build_command_str(commands::command_string& cmd)
+	void RSET::build_command_str(commands::command_string& cmdstr)
 	{
-		unsigned char command[2];
-		command[0] = 0x00;
-		command[1] = 'k';
-		cmd.data = new unsigned char[2];
-		std::cout << sizeof(cmd.data) << std::endl;
-		cmd.length = 2;
-		bcopy(command, cmd.data, 2);
+		int size = sizeof(struct command);
+		unsigned char buffer[size];
+
+		struct command* cmd = (struct command*) buffer;
+		cmd->sn = htons(config::SequenceHandler::get_te_sn());
+
+		bcopy(RSET::_command, cmd->cmd, sizeof(cmd->cmd));
+		cmdstr.data = new unsigned char[size];
+
+		bcopy(cmd, cmdstr.data, size);
+		cmdstr.length = size;
+
 	}
 
 	RSET::~RSET()

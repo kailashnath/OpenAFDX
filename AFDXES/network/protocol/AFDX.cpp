@@ -21,7 +21,7 @@ namespace network
 		AFDX::AFDX(config::VirtualLink& vl)
 		{
 			init();
-			_eth_src_mac = "03:00:00:00:00:02";
+			_eth_src_mac = vl._src_mac;
 			_eth_dst_mac = "02:00:00:00:00:05";
 			_ip_daddr = vl._dst_ip;
 			_ip_saddr = vl._src_ip;
@@ -48,7 +48,10 @@ namespace network
 		{
 			int size_index = 0;
 			int payload_size = data_payload.length;
-			std::cout << "Data" << payload_size << std::endl;
+			int padding_size = 0;
+
+			if(payload_size < 17)
+				padding_size = 17 - payload_size;
 
 			struct ether_header* ethhdr =
 					(struct ether_header*) _datagram;
@@ -64,9 +67,11 @@ namespace network
 
 			// add ethernet details
 			ethhdr->ether_type = ntohs(ETHERTYPE_IP);
+
 			ether_addr* address = ether_aton(_eth_src_mac.c_str());
 			bcopy(address->ether_addr_octet, ethhdr->ether_shost,
 					sizeof(address->ether_addr_octet));
+
 			address = ether_aton(_eth_dst_mac.c_str());
 			bcopy(address->ether_addr_octet, ethhdr->ether_dhost,
 					sizeof(address->ether_addr_octet));
@@ -87,9 +92,9 @@ namespace network
 			ip_header->check 	= _ip_checksum;
 			ip_header->saddr 	= inet_addr(_ip_saddr.c_str());
 			ip_header->daddr 	= inet_addr(_ip_daddr.c_str());
-			ip_header->check 	= network::csum(
-					(unsigned short*) (_datagram + sizeof(struct ether_header)),
-					ip_total_length >> 1);
+			ip_header->check 	= network::protocol::csum(
+					reinterpret_cast<unsigned short*> (_datagram + sizeof(struct ether_header)),
+					ip_total_length);
 
 			// add udp details
 			udp_header->dest   = htons(_udp_dest);
@@ -101,7 +106,22 @@ namespace network
 			bcopy(data_payload.data, _datagram + size_index, payload_size );
 			size_index += payload_size;
 
-			network::Transmitter t(const_cast<char*>("wlan0"), NULL);
+			// this part takes care of padding part for AFDX
+			if(padding_size > 0)
+			{
+				unsigned char padding[padding_size];
+				memset(padding, 0x00, padding_size);
+				bcopy(padding, _datagram + size_index, padding_size);
+				size_index += padding_size;
+			}
+
+			// this part takes care of adding the packet sequence number
+			{
+				_datagram[size_index] =	config::SequenceHandler::get_vl_sn(1);
+				size_index += 1;
+			}
+
+			network::Transmitter t(const_cast<char*>("eth0"), NULL);
 
 			if(t.do_transmit(const_cast<u_char*>(_datagram), size_index,
 					_iface, 5, true) < 0)

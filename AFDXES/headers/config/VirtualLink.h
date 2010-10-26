@@ -13,8 +13,11 @@
 #include <iostream>
 #include <algorithm>
 #include "stdlib.h"
+#include "stdio.h"
+#include "string.h"
 
 #include "common.h"
+#include "../network/protocol/common.h"
 
 namespace config
 {
@@ -53,6 +56,7 @@ namespace config
 			std::string _port_master_name;
 			std::string _src_ip;
 			std::string _dst_ip;
+			std::string _src_mac;
 
 			bool _ip_frag_allowed;
 
