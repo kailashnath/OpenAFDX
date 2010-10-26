@@ -13,7 +13,8 @@ namespace commands
 {
 	struct command_string
 	{
-		unsigned char* values;
+		unsigned char* data;
+		unsigned short length;
 	};
 }
 #endif /* COMMANDSTRING_H_ */

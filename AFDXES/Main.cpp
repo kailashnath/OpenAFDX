@@ -24,8 +24,10 @@ using namespace network;
 
 const char* filename = "/media/439385db-7b6b-4585-a6ae-bd5553ca10d7/"
 		"Releases/ITR-ES-003-RELEASE/captures/ITR-ES-003.cap";
-const char* icd_file = "/home/robuntu/Releases/PythonScripts/Linux/ICD/"
-		"newicd.csv";
+//const char* icd_file = "/home/robuntu/Releases/PythonScripts/Linux/ICD/"
+	//	"newicd.csv";
+
+const char* icd_file = "/home/kailash/Github/ICD/newicd.csv";
 
 int main(void)
 {
@@ -38,12 +40,11 @@ int main(void)
 	parser.cleanup();
 
 	config::VirtualLink rst_vl = outputs[1];
-	network::protocol::AFDX afdx(rst_vl);
-	std::cout << "Val " << rset.get_command_str().values << std::endl;
-	std::cout << "Ref ;: " << rset.get_command_str().values << std::endl;
 
-	//afdx.build_raw_packet();
-	//afdx.build_packet();
+	network::protocol::AFDX afdx(rst_vl);
+	commands::command_string cmd;
+	rset.build_command_str(cmd);
+	afdx.build_packet(cmd);
 
 	/*NetworkConfiguration nc;
 	nc.show_user_options();

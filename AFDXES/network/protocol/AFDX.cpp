@@ -47,8 +47,9 @@ namespace network
 		void AFDX::build_packet(commands::command_string& data_payload)
 		{
 			int size_index = 0;
-			_payload = (char*)"kailash";
-			std::cout << "Payload : " << data_payload.values[1] << std::endl;
+			int payload_size = data_payload.length;
+			std::cout << "Data" << payload_size << std::endl;
+
 			struct ether_header* ethhdr =
 					(struct ether_header*) _datagram;
 			size_index = sizeof(struct ether_header);
@@ -78,7 +79,7 @@ namespace network
 			ip_header->ihl 	   = _ip_ihl;
 			ip_header->version = _ip_version;
 			ip_header->tos 	   = _ip_tos;
-			ip_header->tot_len = htons(ip_total_length + strlen(_payload));
+			ip_header->tot_len = htons(ip_total_length + payload_size);
 			ip_header->id 	   = htons(_ip_id);
 			ip_header->frag_off = _ip_frag_off;
 			ip_header->ttl 		= _ip_ttl;
@@ -94,16 +95,16 @@ namespace network
 			udp_header->dest   = htons(_udp_dest);
 			udp_header->source = htons(_udp_source);
 			udp_header->check  = _udp_checksum;
-			udp_header->len    = htons(sizeof(struct udphdr) + strlen(_payload));
+			udp_header->len    = htons(sizeof(struct udphdr) + payload_size);
+			std::cout << "Payload size is" << payload_size << std::endl;
 
-			char* payload = (char*)(_datagram + size_index);
-			size_index += strlen(_payload);
-			strcpy(payload, _payload);
+			bcopy(data_payload.data, _datagram + size_index, payload_size );
+			size_index += payload_size;
 
-			network::Transmitter t(const_cast<char*>("eth0"), NULL);
+			network::Transmitter t(const_cast<char*>("wlan0"), NULL);
 
 			if(t.do_transmit(const_cast<u_char*>(_datagram), size_index,
-					_iface, 100, true) < 0)
+					_iface, 5, true) < 0)
 				std::cout << "Error !" << std::endl;
 		}
 

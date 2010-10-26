@@ -22,7 +22,7 @@ namespace commands
 	public:
 		RSET();
 		void build(void);
-		commands::command_string get_command_str(void);
+		void build_command_str(command_string&);
 		virtual ~RSET();
 	private:
 		const static char* _command;

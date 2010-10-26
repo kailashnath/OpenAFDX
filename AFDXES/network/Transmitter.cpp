@@ -17,7 +17,7 @@ namespace network
 	Transmitter::Transmitter(char* interface_a, char* interface_b)
 	{
 		strcpy(_error, "");
-		std::cout << "In transmitter" << std::endl;
+
 		if(_pcap_descr_a == NULL && interface_a != NULL)
 		{
 			_pcap_descr_a = pcap_open_live(interface_a, BUFSIZ, 0, -1, _error);
