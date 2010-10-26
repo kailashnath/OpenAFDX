@@ -25,6 +25,7 @@ C_UPPER_DEPS :=
 SUBDIRS := \
 parser \
 network/protocol \
+network/listeners \
 network \
 config \
 commands \

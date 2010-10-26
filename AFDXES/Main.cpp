@@ -19,23 +19,23 @@
 #include "headers/commands/RSET.h"
 #include "headers/network/protocol/AFDX.h"
 #include "headers/network/Receiver.h"
-#include "headers/network/Listener.h"
-#include "headers/network/MessageListener.h"
+#include "headers/network/listeners/Listener.h"
+#include "headers/network/listeners/MessageListener.h"
 
 using namespace std;
 using namespace network;
 
 const char* filename = "/media/439385db-7b6b-4585-a6ae-bd5553ca10d7/"
 		"Releases/ITR-ES-003-RELEASE/captures/ITR-ES-003.cap";
-const char* icd_file = "/home/robuntu/Releases/PythonScripts/Linux/ICD/"
-		"newicd.csv";
-//const char* icd_file = "/home/kailash/Github/ICD/newicd.csv";
+//const char* icd_file = "/home/robuntu/Releases/PythonScripts/Linux/ICD/"
+	//	"newicd.csv";
+const char* icd_file = "/home/kailash/Github/ICD/newicd.csv";
 
 int main(void)
 {
-	network::Receiver rx("eth0");
-	network::MessageListener* listen = new network::MessageListener();
-	rx.register_listener(&listen);
+	network::Receiver rx("wlan0");
+	network::listeners::MessageListener listen;
+	rx.register_listener(listen);
 	rx.listen();
 
 	/*

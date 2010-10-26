@@ -14,11 +14,12 @@
 #include <ctime>
 #include <vector>
 #include <string.h>
+#include <stdlib.h>
 #include <netinet/ether.h>
 #include <netinet/in.h>
 #include <netinet/ip.h>
 #include <netinet/udp.h>
-#include "Listener.h"
+#include "listeners/Listener.h"
 
 namespace network
 {
@@ -27,7 +28,7 @@ namespace network
 		const static std::string kafdxFilterExpression;
 
 		Receiver(std::string);
-		void register_listener(network::Listener*);
+		void register_listener(network::listeners::Listener&);
 		void listen(void);
 		virtual ~Receiver();
 	private:
@@ -37,7 +38,7 @@ namespace network
 		pcap_pkthdr* _phdr;
 		bpf_u_int32 _netp;
 		bpf_u_int32 _maskp;
-		network::Listener* _listener;
+		network::listeners::Listener* _listener;
 		void init(void);
 	};
 	void callback(u_char* arg, const struct pcap_pkthdr* pcktHeader,

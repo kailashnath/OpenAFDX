@@ -11,16 +11,25 @@
 
 #include <string>
 #include <sys/types.h>
+#include <net/ethernet.h>
+#include <netinet/ip.h>
+#include <netinet/in.h>
+#include <netinet/udp.h>
 #include <string.h>
 #include <stddef.h>
+#include <stdlib.h>
+#include <iostream>
 
 namespace network
 {
-	class Listener
+	namespace listeners
 	{
-	public:
-		virtual bool handle(u_char* message) const = 0;
-	};
+		class Listener
+		{
+		public:
+			virtual bool handle(u_char* message, unsigned short) = 0;
+		};
+	}
 }
 
 #endif /* LISTENER_H_ */

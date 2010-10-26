@@ -15,8 +15,10 @@ Main.d Main.o: ../Main.cpp ../headers/network/NetworkConfiguration.h \
  ../headers/network/protocol/../../config/VirtualLink.h \
  ../headers/network/protocol/../../commands/CommandString.h \
  ../headers/network/protocol/../../config/SequenceNumbers.h \
- ../headers/network/Receiver.h ../headers/network/Listener.h \
- ../headers/network/Listener.h ../headers/network/MessageListener.h
+ ../headers/network/Receiver.h ../headers/network/listeners/Listener.h \
+ ../headers/network/listeners/Listener.h \
+ ../headers/network/listeners/MessageListener.h \
+ ../headers/network/listeners/Listener.h
 
 ../headers/network/NetworkConfiguration.h:
 
@@ -64,8 +66,10 @@ Main.d Main.o: ../Main.cpp ../headers/network/NetworkConfiguration.h \
 
 ../headers/network/Receiver.h:
 
-../headers/network/Listener.h:
+../headers/network/listeners/Listener.h:
 
-../headers/network/Listener.h:
+../headers/network/listeners/Listener.h:
 
-../headers/network/MessageListener.h:
+../headers/network/listeners/MessageListener.h:
+
+../headers/network/listeners/Listener.h:

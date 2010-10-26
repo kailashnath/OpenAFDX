@@ -11,6 +11,7 @@ RM := rm -rf
 -include subdir.mk
 -include parser/subdir.mk
 -include network/protocol/subdir.mk
+-include network/listeners/subdir.mk
 -include network/subdir.mk
 -include config/subdir.mk
 -include commands/subdir.mk

@@ -13,12 +13,15 @@
 
 namespace network
 {
-	class MessageListener : public Listener
+	namespace listeners
 	{
-	public:
-		MessageListener();
-		bool handle(u_char*);
-	};
+		class MessageListener : public Listener
+		{
+		public:
+			MessageListener();
+			bool handle(u_char*, unsigned short);
+		};
+	}
 }
 
 

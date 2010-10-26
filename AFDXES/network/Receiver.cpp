@@ -10,7 +10,7 @@
 
 namespace network
 {
-	const std::string network::Receiver::kafdxFilterExpression = "ip and udp and udp[6:2] = 0x0";
+	const std::string network::Receiver::kafdxFilterExpression = "ip and ip[9] = 0x11";
 	pcap_t* network::Receiver::_pd = NULL;
 
 	Receiver::Receiver(std::string interface)
@@ -21,7 +21,6 @@ namespace network
 
 	void Receiver::init()
 	{
-
 		if(_pd != NULL)
 		{
 			std::cout << "Desc initialized" << std::endl;
@@ -62,31 +61,22 @@ namespace network
 		std::cout << "Initialized successfull" << std::endl;
 	}
 
-	void Receiver::register_listener(network::Listener* listener)
+	void Receiver::register_listener(network::listeners::Listener& listener)
 	{
-		this->_listener = listener;
+		_listener = &listener;
 	}
 
 	void Receiver::listen()
 	{
+		pcap_pkthdr phdr;
 		u_char* datagram;
-		unsigned short header_size = sizeof(struct ether_header) +
-				sizeof(struct iphdr) + sizeof(struct udphdr);
-
-		if(_listener == NULL)
-			return;
 
 		while(true)
 		{
-			datagram = const_cast<u_char*>(pcap_next(_pd, _phdr));
-			if(datagram == NULL)
-				continue;
-			u_char* payload = datagram + header_size;
-			std::cout << "Payload is " << payload << std::endl;
-
-			if((*_listener).handle(payload))
+			datagram = const_cast<u_char*>(pcap_next(_pd, &phdr));
+			if(datagram != NULL)
 			{
-				break;
+				_listener->handle(datagram, (unsigned short)phdr.len);
 			}
 		}
 	}
