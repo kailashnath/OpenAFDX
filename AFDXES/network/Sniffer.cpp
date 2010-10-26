@@ -24,6 +24,8 @@ namespace network
 	// packets being captured.
 	std::vector<const u_char*> common::packetDataVector;
 
+	void (Sniffer::*sniffListener)(char*) = NULL;
+
 	Sniffer::Sniffer(pcap_if_t* interface)
 	{
 

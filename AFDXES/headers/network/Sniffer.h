@@ -14,6 +14,7 @@
 
 namespace network
 {
+
 	class Sniffer
 	{
 	public:
@@ -22,6 +23,7 @@ namespace network
 		int static print_iface_details(void);
 		int static start_sniffing(void);
 		int static stop_sniffing(void);
+		static void (Sniffer::*sniffListener)(char*);
 		static void monitor_sniffer(void);
 		virtual ~Sniffer(void);
 

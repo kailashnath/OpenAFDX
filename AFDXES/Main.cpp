@@ -18,6 +18,9 @@
 #include "headers/config/VirtualLink.h"
 #include "headers/commands/RSET.h"
 #include "headers/network/protocol/AFDX.h"
+#include "headers/network/Receiver.h"
+#include "headers/network/Listener.h"
+#include "headers/network/MessageListener.h"
 
 using namespace std;
 using namespace network;
@@ -30,6 +33,12 @@ const char* icd_file = "/home/robuntu/Releases/PythonScripts/Linux/ICD/"
 
 int main(void)
 {
+	network::Receiver rx("eth0");
+	network::MessageListener* listen = new network::MessageListener();
+	rx.register_listener(&listen);
+	rx.listen();
+
+	/*
 	commands::RSET rset;
 	parser::ICDParser parser(icd_file);
 	parser.load_objects_from_icd();
@@ -45,7 +54,7 @@ int main(void)
 	rset.build_command(cmd);
 	afdx.build_packet(cmd);
 	afdx.send();
-
+	*/
 	/*NetworkConfiguration nc;
 	nc.show_user_options();
 	Reader r(filename);

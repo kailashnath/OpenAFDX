@@ -27,6 +27,7 @@ namespace network
 	public :
 		static const std::string kafdxFilterExperssion;
 		static std::vector<const u_char*> packetDataVector;
+		static void (*responseListener)(char*);
 		static void pcapCallback(u_char*, const struct pcap_pkthdr*, const u_char*);
 		static void show_packet_details(const struct pcap_pkthdr*);
 		static void show_ether_details(const struct ether_header*);

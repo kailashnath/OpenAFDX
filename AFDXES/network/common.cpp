@@ -11,6 +11,7 @@
 namespace network
 {
 	const std::string common::kafdxFilterExperssion = "ip and udp";
+	void (common::*responseListener)(char*) = NULL;
 	void common::pcapCallback(u_char* arg, const struct pcap_pkthdr* pcktHeader,
 					  const u_char* data)
 	{
@@ -34,6 +35,7 @@ namespace network
 
 		detIndex += sizeof(struct udphdr);
 		show_payload(data + detIndex);
+
 	}
 
 	void common::show_packet_details(const struct pcap_pkthdr* packet_header)
