@@ -33,7 +33,7 @@ const char* icd_file = "/home/kailash/Github/ICD/newicd.csv";
 
 int main(void)
 {
-	network::Receiver rx("wlan0");
+	network::Receiver rx("eth0");
 	network::listeners::MessageListener listen;
 	rx.register_listener(listen);
 	rx.listen();

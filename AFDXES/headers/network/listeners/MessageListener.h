@@ -10,7 +10,7 @@
 #define MESSAGELISTENER_H_
 
 #include "Listener.h"
-
+#include <sstream>
 namespace network
 {
 	namespace listeners

@@ -10,7 +10,7 @@
 
 namespace network
 {
-	const std::string network::Receiver::kafdxFilterExpression = "ip and ip[9] = 0x11";
+	const std::string network::Receiver::kafdxFilterExpression = "ip and ip[9] = 0x11 and udp[6:2] = 0x0";
 	pcap_t* network::Receiver::_pd = NULL;
 
 	Receiver::Receiver(std::string interface)
